@@ -43,7 +43,7 @@ Next sprint, we will be working on the following:
 ## A table to demonstrate the time spent by each member during the spring
 | Team Member    | Hours Spent | Assigned tasks                                        | In-class tasks |
 |----------------|-------------|-------------------------------------------------------|----------------|
-| Oleg Dukalskiy | x           | Creating tasks on Trello, and Figma prototype         | Submitted      |
-| Remi Maskulin  | 7.5         | SCRUM MASTER, Writing project plan, organizing Trello | Submitted      |
-| Leo Leerilä    | x           | Database design, tasks to Trello                      | Submitted      |
-| Eeli Mäkinen   | x           | Writing vision statement and user stories             | Submitted      |
+| Oleg Dukalskiy | 4           | Creating tasks on Trello, and Figma prototype         | Submitted      |
+| Remi Maskulin  | 8           | SCRUM MASTER, Writing project plan, organizing Trello | Submitted      |
+| Leo Leerilä    | 4.5         | Database design, tasks to Trello                      | Submitted      |
+| Eeli Mäkinen   | 6.5         | Writing vision statement and user stories             | Submitted      |
