@@ -18,9 +18,8 @@ along with the initial product backlog.
 
 ## Demo Summary
 
-~~During the sprint review meeting, we presented the project setup, including the GitHub repository and Trello board. 
-We showcased the defined project vision and project plan. Additionally, we demonstrated the UI blueprint created in Figma, 
-highlighting the key features and user flow of the application.~~
+During the sprint review meeting, we presented the project setup, including the GitHub repository and Trello board. 
+We showcased the defined project vision and project plan. Additionally, showed UI prototype created in Figma.
 
 ## What Went Well
 - Started planning early
