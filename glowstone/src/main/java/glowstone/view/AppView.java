@@ -11,6 +11,7 @@ public class AppView extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/appview.fxml"));
         Parent root = fxmlLoader.load();
         stage.setScene(new Scene(root));
+        stage.setTitle("Glowstone");
         stage.show();
     }
 }

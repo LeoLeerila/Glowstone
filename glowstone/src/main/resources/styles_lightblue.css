@@ -1,9 +1,9 @@
 .root {
     -fx-background-color: #b2c5e3;
     -fx-font-family: "JetBrains Mono Light";
-    very_light: #bcbef1;
+    very-light: #bcbef1;
     light-blue: #8286d9;
-    custom_blue: #6d71bf;
+    custom-blue: #6d71bf;
 }
 .header {
     -fx-padding: 8;
@@ -15,21 +15,39 @@
 }
 
 .tool-bar {
-    -fx-background-color: custom_blue;
+    -fx-background-color: custom-blue;
     -fx-padding: 8;
     -fx-spacing: 8;
 
 }
 
 .left_column {
-    -fx-border-color: custom_blue;
+    -fx-border-color: custom-blue;
 }
 
 .column_btn {
     -fx-padding: 2px;
     -fx-background-color: light-blue;
 }
+.add_clmn_btn {
+    -fx-background-color: custom-blue;
+}
+.editing_btns {
+    -fx-background-color: white;
+    -fx-padding: 2;
+    -fx-border-color: none;
+}
+.column_btn:pressed, .button:pressed, .add_clmn_btn:pressed {
+    -fx-background-color: very-light;
+}
 
-.column_btn:pressed, .button:pressed {
-    -fx-background-color: very_light;
+.category_view {
+    -fx-border-color: custom-blue;
+}
+
+.category_title {
+    -fx-background-color: very-light;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
 }
