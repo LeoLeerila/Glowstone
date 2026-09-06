@@ -1,0 +1,35 @@
+.root {
+    -fx-background-color: #b2c5e3;
+    -fx-font-family: "JetBrains Mono Light";
+    very_light: #bcbef1;
+    light-blue: #8286d9;
+    custom_blue: #6d71bf;
+}
+.header {
+    -fx-padding: 8;
+    -fx-spacing: 8;
+}
+.button {
+    -fx-background-color: light-blue;
+    -fx-border-color: none;
+}
+
+.tool-bar {
+    -fx-background-color: custom_blue;
+    -fx-padding: 8;
+    -fx-spacing: 8;
+
+}
+
+.left_column {
+    -fx-border-color: custom_blue;
+}
+
+.column_btn {
+    -fx-padding: 2px;
+    -fx-background-color: light-blue;
+}
+
+.column_btn:pressed, .button:pressed {
+    -fx-background-color: very_light;
+}
