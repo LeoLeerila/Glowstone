@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 public class AppView extends Application {
     @Override
     public void start(Stage stage) throws Exception{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/appview.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/appview.FXML"));
         Parent root = fxmlLoader.load();
         stage.setScene(new Scene(root));
         stage.setTitle("Glowstone");

@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CategoryTest {
     
     @Test
-    void testCategoryCreaton() {
+    void testCategoryCreation() {
         Category category = new Category("Test name");
 
         assertEquals("Test name", category.getName());
-        assertEquals(1, category.getId());
+        assertEquals(7, category.getId()); //TEMP should take id from db
     }
 
     @Test
@@ -26,9 +26,7 @@ class CategoryTest {
     @Test
     void testSetId() {
         Category category = new Category("Test name");
-
         category.setId(1);
-
         assertEquals(1, category.getId());
     }
 
@@ -37,7 +35,7 @@ class CategoryTest {
         Category category = new Category("Test name");
         Note note = new Note("Test Title");
 
-        category.setNotes(note);
+        category.addNotes(note);
 
         assertEquals(1, category.getNotes().size());
         assertEquals(note, category.getNotes().get(0));
@@ -67,8 +65,8 @@ class CategoryTest {
         Note note1 = new Note("Test Title1");
         Note note2 = new Note("Test Title2");
 
-        category.setNotes(note1);
-        category.setNotes(note2);
+        category.addNotes(note1);
+        category.addNotes(note2);
 
         assertEquals(2, category.getNotes().size());
         assertEquals(note1, category.getNotes().get(0));

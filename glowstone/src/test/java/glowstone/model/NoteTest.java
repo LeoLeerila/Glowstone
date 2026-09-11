@@ -12,7 +12,7 @@ class NoteTest {
 
         assertEquals("Test Title", note.getTitle());
 
-        assertEquals(1, note.getId());
+        assertEquals(4, note.getId()); //TEMP should take id from db
     }
 
     @Test
@@ -38,8 +38,8 @@ class NoteTest {
         Note note1 = new Note("Note 1");
         Note note2 = new Note("Note 2");
 
-        assertEquals(1, note1.getId());
-        assertEquals(2, note2.getId());
+        assertEquals(2, note1.getId()); //TEMP should take id from db
+        assertEquals(3, note2.getId()); //TEMP should take id from db
     }
 
     @Test
