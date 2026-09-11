@@ -55,7 +55,7 @@ public class appControlls {
         MenuItem o_2 = new MenuItem("Delete");
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
         o_1.setOnAction(event -> { editTab();});
-        o_2.setOnAction(event -> { deleteTab();});
+        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
         tab_btn.setGraphic(m);
         tab_column.getChildren().add(tab_btn);
 
@@ -71,10 +71,15 @@ public class appControlls {
         //eventhandler and method call
 
         VBox noteInstance = new VBox();
+        noteInstance.getStyleClass().add("note_card");
         HBox noteTitle = new HBox();
         Label noteName = new Label("Default note title");
         VBox noteContents = new VBox();
+        noteContents.setFillWidth(true);
         Label theStuff = new Label("yapadabadubu yapapapapapa lalalalala aaaaaaaaaa -Larry");
+        theStuff.setWrapText(true);
+        noteInstance.setMaxWidth(Double.MAX_VALUE);
+        theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
         noteContents.getChildren().add(theStuff);
         noteTitle.getChildren().add(noteName);
         noteInstance.getChildren().addAll(noteTitle, noteContents);
@@ -90,6 +95,16 @@ public class appControlls {
 
     public void addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
+        Button tab_btn = new Button("Another one");
+        tab_btn.getStyleClass().add("column_btn");
+        tab_btn.setOnAction(event -> {openTab();});
+        MenuItem o_1 = new MenuItem("Edit");
+        MenuItem o_2 = new MenuItem("Delete");
+        MenuButton m = new MenuButton("✎", null, o_1, o_2);
+        o_1.setOnAction(event -> { editTab();});
+        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
+        tab_btn.setGraphic(m);
+        tab_column.getChildren().add(tab_btn);
     }
     public void editTab(){
         System.out.println("EDITINGGGG");
@@ -98,7 +113,17 @@ public class appControlls {
         System.out.println("DELETING");
     }
     public void addNewCategory(){
-        System.out.println("ADDING NEW CATEGORYYY!!!");
+        VBox categoryColumn = new VBox();
+        categoryColumn.getStyleClass().add("category_view");
+        HBox categoryTitle = new HBox();
+        categoryTitle.getStyleClass().add("category_title");
+        Label categoryName = new Label("Default Category");
+        Button categoryEdit = new Button("✎");
+        categoryEdit.setOnAction(event -> { editCategory();});
+        categoryEdit.getStyleClass().add("editing_btns");
+        categoryTitle.getChildren().addAll(categoryName, categoryEdit);
+        categoryColumn.getChildren().add(categoryTitle);
+        noteSpace_view.getChildren().add(categoryColumn);
     }
     public void editCategory(){
         System.out.println("EDITING BUT WITH CATEGORYYY");

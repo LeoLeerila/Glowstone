@@ -45,6 +45,7 @@
 
 .category_view {
     -fx-border-color: custom-blue;
+    -fx-pref-width: 264.0;
 }
 
 .category_title {
@@ -53,4 +54,14 @@
     -fx-padding: 5px;
     -fx-border-insets: 5px;
     -fx-background-insets: 5px;
+}
+
+.note_card {
+    -fx-background-color: very-light;
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-min-width: 0;
+    -fx-max-width: 10000;
 }
