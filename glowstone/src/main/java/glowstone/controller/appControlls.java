@@ -1,6 +1,8 @@
 package glowstone.controller;
 import glowstone.view.AppView;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -33,8 +35,10 @@ public class appControlls {
     public void initialize() {
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
+        Add_tab.setOnAction(event -> { addNewTab();});
+        m_1.setOnAction(event -> { addNewTab();});
+        m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
-        // https://www.geeksforgeeks.org/java/javafx-menubutton/ <- do that shit later
         loadWorkingArea();
     }
 
@@ -44,12 +48,14 @@ public class appControlls {
 
         //REPLACE THIS CODE LATER!!!!!!!!!!!!! This is intended to load the users existing data!!!!
         //^wise it may be to instead loop the below for all user data!
-        Button tab_btn = new Button("Default Workspace");
+        Button tab_btn = new Button("Default Workspace"); //This especially needs a way to be tied to an id of a workspace!
         tab_btn.getStyleClass().add("column_btn");
+        tab_btn.setOnAction(event -> {openTab();});
         MenuItem o_1 = new MenuItem("Edit");
         MenuItem o_2 = new MenuItem("Delete");
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
-        //add eventHandlers to Edit and Delete (call a method)
+        o_1.setOnAction(event -> { editTab();});
+        o_2.setOnAction(event -> { deleteTab();});
         tab_btn.setGraphic(m);
         tab_column.getChildren().add(tab_btn);
 
@@ -59,6 +65,7 @@ public class appControlls {
         categoryTitle.getStyleClass().add("category_title");
         Label categoryName = new Label("Default Category");
         Button categoryEdit = new Button("✎");
+        categoryEdit.setOnAction(event -> { editCategory();});
         categoryEdit.getStyleClass().add("editing_btns");
         categoryTitle.getChildren().addAll(categoryName, categoryEdit);
         //eventhandler and method call
@@ -74,5 +81,26 @@ public class appControlls {
 
         categoryColumn.getChildren().addAll(categoryTitle, noteInstance);
         noteSpace_view.getChildren().add(categoryColumn);
+    }
+    public void openTab(){
+        //clear workspace
+        //fetch data for the specific tab based on some sort of ID
+        System.out.println("On this tab!");
+    }
+
+    public void addNewTab(){
+        System.out.println("ADDING NEW WORKSPACE TAB!!!");
+    }
+    public void editTab(){
+        System.out.println("EDITINGGGG");
+    }
+    public void deleteTab(){
+        System.out.println("DELETING");
+    }
+    public void addNewCategory(){
+        System.out.println("ADDING NEW CATEGORYYY!!!");
+    }
+    public void editCategory(){
+        System.out.println("EDITING BUT WITH CATEGORYYY");
     }
 }
