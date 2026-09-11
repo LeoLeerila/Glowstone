@@ -28,6 +28,8 @@
 .column_btn {
     -fx-padding: 2px;
     -fx-background-color: light-blue;
+    -fx-content-display: right;
+
 }
 .add_clmn_btn {
     -fx-background-color: custom-blue;
@@ -47,6 +49,7 @@
 
 .category_title {
     -fx-background-color: very-light;
+    -fx-alignment: center;
     -fx-padding: 5px;
     -fx-border-insets: 5px;
     -fx-background-insets: 5px;
