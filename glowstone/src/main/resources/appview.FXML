@@ -50,7 +50,7 @@
       </HBox>
    </top>
    <left>
-      <VBox fx:id="left_column" prefHeight="538.0" prefWidth="139.0" styleClass="left_column" stylesheets="@styles_lightblue.css" BorderPane.alignment="CENTER">
+      <VBox fx:id="left_column" prefHeight="538.0" prefWidth="139.0" maxWidth="Infinity" styleClass="left_column" stylesheets="@styles_lightblue.css" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="tab_column" prefHeight="499.0" prefWidth="111.0">
                <children>

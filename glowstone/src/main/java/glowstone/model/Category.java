@@ -8,7 +8,7 @@ public class Category {
     private int parentId;
     private int id;
     public String name;
-    public List<Note> notes;
+    public List<Note> notes = new ArrayList<>();
 
     public Category(String name){
         this.name = name;
@@ -31,6 +31,10 @@ public class Category {
     public void addNotes(Note note) {
         note.setParentId(this.id);
         notes.add(note);
+    }
+
+    public void removeNotes(Note note){
+        notes.removeIf(n -> n.getId() == note.getId());
     }
 
     public void setId(int id) {

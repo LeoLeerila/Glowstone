@@ -23,16 +23,21 @@
 
 .left_column {
     -fx-border-color: custom-blue;
+    -fx-pref-width: 220;
+    -fx-max-width: 250;
 }
 
 .column_btn {
     -fx-padding: 2px;
     -fx-background-color: light-blue;
     -fx-content-display: right;
-
+    -fx-pref-width: 220;
+    -fx-max-width: 350;
 }
 .add_clmn_btn {
     -fx-background-color: custom-blue;
+    -fx-pref-width: 220;
+    -fx-max-width: 350;
 }
 .editing_btns {
     -fx-background-color: white;
