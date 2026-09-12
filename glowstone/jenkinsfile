@@ -1,13 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/LeoLeerila/Glowstone.git'
-            }
-        }
         stage('Build') {
             steps {
+                git 'https://github.com/LeoLeerila/Glowstone.git'
+
                 sh 'mvn clean install'
             }
         }
