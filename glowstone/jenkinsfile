@@ -5,14 +5,13 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/LeoLeerila/Glowstone.git'
-                sh "mvn -f glowstone/pom.xml clean compile"
             }
         }
         
         stage('Build') {
              
             steps {
-                sh 'mvn install'
+                sh 'mvn -f glowstone/pom.xml install'
             }
         }
         stage('Test') {
