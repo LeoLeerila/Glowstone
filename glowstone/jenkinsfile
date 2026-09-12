@@ -5,6 +5,9 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/LeoLeerila/Glowstone.git'
+                dir("folder") {
+                    sh "pwd"
+                }
             }
         }
         stage('Build') {
