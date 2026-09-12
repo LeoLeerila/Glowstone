@@ -11,6 +11,9 @@ pipeline {
         stage('Build') {
              
             steps {
+                 dir("glowstone/") {
+                    sh "pwd"
+                }
                 sh 'mvn clean install'
             }
         }
