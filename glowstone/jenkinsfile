@@ -11,8 +11,7 @@ pipeline {
         stage('Build') {
              
             steps {
-                sh 'cd glowstone/glowstone'
-                sh 'mvn clean install'
+                sh 'mvn install'
             }
         }
         stage('Test') {
