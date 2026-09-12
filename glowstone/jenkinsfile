@@ -5,6 +5,7 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/LeoLeerila/Glowstone.git'
+                    sh 'cd glowstone'
             }
         }
         
