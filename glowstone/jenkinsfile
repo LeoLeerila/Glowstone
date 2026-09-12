@@ -5,11 +5,12 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/LeoLeerila/Glowstone.git'
-                dir("glowstone") {
-                    sh "pwd"
-                }
+                
             }
         }
+        dir("glowstone") {
+                sh "pwd"
+            }
         stage('Build') {
             steps {
                 sh 'mvn clean install'
