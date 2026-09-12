@@ -5,7 +5,7 @@ pipeline {
             steps {
                 git branch: 'main', 
                     url: 'https://github.com/LeoLeerila/Glowstone.git'
-                    sh 'cd glowstone'
+                sh "mvn -f glowstone/pom.xml clean compile"
             }
         }
         
