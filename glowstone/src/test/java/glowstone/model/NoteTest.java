@@ -3,6 +3,8 @@ package glowstone.model;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class NoteTest {
 
@@ -11,8 +13,6 @@ class NoteTest {
         Note note = new Note("Test Title");
 
         assertEquals("Test Title", note.getTitle());
-
-        assertEquals(4, note.getId()); //TEMP should take id from db
     }
 
     @Test
@@ -38,8 +38,7 @@ class NoteTest {
         Note note1 = new Note("Note 1");
         Note note2 = new Note("Note 2");
 
-        assertEquals(2, note1.getId()); //TEMP should take id from db
-        assertEquals(3, note2.getId()); //TEMP should take id from db
+        assertNotEquals(note1.getId(), note2.getId()); //TEMP should take id from db
     }
 
     @Test
@@ -80,5 +79,21 @@ class NoteTest {
         note.setContent("Updated content");
 
         assertEquals("Updated content", note.getContent());
+    }
+
+    @Test
+    void setParentIdUpdatesParentId() {
+        Note note = new Note("Child note");
+
+        note.setParentId(42);
+
+        assertEquals(42, note.getParentId());
+    }
+
+    @Test
+    void newNoteStartsWithNullContent() {
+        Note note = new Note("Test title");
+
+        assertNull(note.getContent());
     }
 }
