@@ -22,7 +22,7 @@ public class DB {
             PreparedStatement statement = db.prepareStatement("SELECT * FROM `" + table + "` WHERE `id` = '" + id + "'");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt("id") + " " + resultSet.getString("content") + " " + resultSet.getInt("name"));
+                System.out.println(resultSet.getInt("id") + " " + resultSet.getString("content") + " " + resultSet.getString("name"));
             }
         } catch (Exception e){
             e.printStackTrace();

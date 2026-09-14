@@ -9,7 +9,7 @@ public class Main {
         AppView.launch(AppView.class);
         try {
             DB.startConnection();
-            DB.getFromDB("note", 1);
+            DB.getFromDB("NOTE", 1);
             DB.endConnection();
         } catch (Exception e) {
             e.printStackTrace();
