@@ -7,7 +7,9 @@ public class Main {
         System.out.println("Hello world!");
         try {
             DB.startConnection();
-            DB.getFromDB("note", 1);
+            DB.readFromDB("NOTE", 1);
+            DB.readNoteByGroup(1);
+            DB.readGroupByTab(1);
             DB.endConnection();
         } catch (Exception e) {
             e.printStackTrace();
