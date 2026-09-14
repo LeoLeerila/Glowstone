@@ -178,4 +178,51 @@ public class DB {
         }
         return result;
     }
+
+    //delete
+    public static int deleteNoteFromDB(int id){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE` WHERE `id` = '" + id + "'");
+            result = statement.executeUpdate();
+            System.out.println("deleted " + id + " from NOTE");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int deleteGroupFromDB(int id){
+        int result = 0;
+        try{
+            //ensure no notes exist in group
+            ResultSet rs = readNoteByGroup(id);
+            while (rs.next()) {
+                deleteNoteFromDB(rs.getInt("id"));
+            }
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_GROUP` WHERE `id` = '" + id + "'");
+            result = statement.executeUpdate();
+            System.out.println("deleted " + id + " from NOTE");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int deleteTabFromDB(int id){
+        int result = 0;
+        try{
+            //ensure no groups exist in tab
+            ResultSet rs = readGroupByTab(id);
+            while (rs.next()) {
+                deleteGroupFromDB(rs.getInt("id"));
+            }
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_TAB` WHERE `id` = '" + id + "'");
+            result = statement.executeUpdate();
+            System.out.println("deleted " + id + " from NOTE");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

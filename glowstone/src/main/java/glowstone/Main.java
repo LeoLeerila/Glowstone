@@ -53,6 +53,63 @@ public class Main {
                 System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
             }
 
+            DB.insertGroupToDB("group to be deleted", 1, 0);
+            DB.insertNoteToDB("note to be deleted", "note to be deleted", 2, 0);
+
+            rs = DB.readFromDB("NOTE_TAB", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE_GROUP", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE_GROUP", 2);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+            
+            rs = DB.readFromDB("NOTE", 2);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            DB.deleteNoteFromDB(1);
+            DB.deleteGroupFromDB(1);
+            DB.deleteTabFromDB(1);
+
+            rs = DB.readFromDB("NOTE_TAB", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE_GROUP", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE_GROUP", 2);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+            
+            rs = DB.readFromDB("NOTE", 2);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
             DB.endConnection();
         } catch (Exception e) {
             e.printStackTrace();
