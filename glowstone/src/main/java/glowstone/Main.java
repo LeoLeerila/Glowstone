@@ -1,8 +1,6 @@
 package glowstone;
 
 import java.sql.ResultSet;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 import glowstone.model.DB;
 
@@ -35,6 +33,25 @@ public class Main {
             DB.readFromDB("NOTE", 1);
             DB.readNoteByGroup(1);
             DB.readGroupByTab(1);
+
+            DB.updateNoteInDB(1, "java updated note content", "java updated note name", 1, 0);
+            DB.updateGroupInDB(1, "java updated note group", 1, 0);
+            DB.updateTabInDB(1, "java updated tab", 0);
+
+            rs = DB.readNoteByGroup(1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", content " + rs.getString("content") + ", name " + rs.getString("name") + ", group_id " + rs.getInt("group_id") + ", thumbnail_id " + rs.getInt("thumbnail_id"));
+            }
+
+            rs = DB.readFromDB("NOTE_GROUP", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
+
+            rs = DB.readFromDB("NOTE_TAB", 1);
+            while (rs.next()) {
+                System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
+            }
 
             DB.endConnection();
         } catch (Exception e) {

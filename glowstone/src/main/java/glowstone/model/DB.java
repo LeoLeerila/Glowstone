@@ -117,4 +117,65 @@ public class DB {
         }
         return resultSet;
     }
+
+    //update
+    //INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`)
+    public static int updateNoteInDB(int noteId, String content, String name, int group_id, int thumbnail_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, thumbnail_id=? WHERE id=" + noteId);
+            statement.setString(1, content);
+            statement.setString(2, name);
+            statement.setInt(3, group_id);
+            if (thumbnail_id == 0) {
+                statement.setObject(4, null, Types.INTEGER);
+            } else {
+                statement.setInt(4, thumbnail_id);
+            }
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`)
+    public static int updateGroupInDB(int groupId, String name, int tab_id, int thumbnail_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_GROUP` SET name=?, tab_id=?, thumbnail_id=? WHERE id=" + groupId);
+            statement.setString(1, name);
+            statement.setInt(2, tab_id);
+            if (thumbnail_id == 0) {
+                statement.setObject(3, null, Types.INTEGER);
+            } else {
+                statement.setInt(3, thumbnail_id);
+            }
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_GROUP");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`)
+    public static int updateTabInDB(int tabId, String name, int thumbnail_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET name=?, thumbnail_id=? WHERE id=" + tabId);
+            statement.setString(1, name);
+            if (thumbnail_id == 0) {
+                statement.setObject(2, null, Types.INTEGER);
+            } else {
+                statement.setInt(2, thumbnail_id);
+            }
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_TAB");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
