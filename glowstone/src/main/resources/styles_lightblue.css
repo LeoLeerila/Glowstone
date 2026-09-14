@@ -5,6 +5,13 @@
     light-blue: #8286d9;
     custom-blue: #6d71bf;
 }
+.settingsOverlay {
+    -fx-background-color: custom-blue;
+}
+
+.langtoggle {
+    -fx-padding: 40;
+}
 .header {
     -fx-padding: 8;
     -fx-spacing: 8;
