@@ -217,7 +217,7 @@ public class DB {
             while (rs.next()) {
                 deleteGroupFromDB(rs.getInt("id"));
             }
-            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_TAB` WHERE `id` = '" + id + "'");
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_TAB` WHERE `id` = '" + id + "'" );
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE");
         } catch (Exception e){

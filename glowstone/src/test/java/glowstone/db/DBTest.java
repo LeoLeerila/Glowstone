@@ -69,19 +69,22 @@ class DBTest {
     void readFromDB() throws SQLException {
 
         ResultSet rs = DB.readFromDB("NOTE_TAB", 1);
-        rs.first();
+        if(rs.next())
         assertEquals("NEW_TAB", rs.getString("name"),"TEST ALSO CHECK UPD");
         rs = DB.readFromDB("NOTE_GROUP", 1);
-        rs.first();
+        if(rs.next())
         assertEquals("NEWGROUP", rs.getString("name"),"TEST ALSO CHECK UPD");
         rs = DB.readFromDB("NOTE", 1);
-        rs.first();
+        if(rs.next())
         assertEquals("NEW_NOTE", rs.getString("name"),"TEST ALSO CHECK UPD");
         rs = DB.readFromDB("NOTE_TAB", 2 );
+        if(rs.next())
         assertEquals("TAB2", rs.getString("name"));
         rs = DB.readFromDB("NOTE_GROUP", 2);
+        if(rs.next())
         assertEquals("GROUP2", rs.getString("name"));
         rs = DB.readFromDB("NOTE", 2);
+        if(rs.next())
         assertEquals("NOTE2", rs.getString("name"));
 
     }
