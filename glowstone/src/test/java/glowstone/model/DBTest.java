@@ -162,4 +162,14 @@ class DBTest {
         assertEquals(0, rs.getFetchSize());
 
     }
+    @Test
+    void readWholeTableFromDB() throws SQLException {
+        ResultSet rs = DB.readWholeTableFromDB("NOTE_GROUP");
+        if(rs.next()){
+            assertEquals(group2Id, rs.getInt("id"));
+        }
+        if(rs.next()){
+            assertEquals(group1Id, rs.getInt("id"));
+        }
+    }
 }
