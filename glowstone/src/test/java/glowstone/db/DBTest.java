@@ -48,6 +48,12 @@ class DBTest {
     void updateNoteInDB() throws SQLException {
 
         DB.updateNoteInDB(1,"NEW_CONTENT","NEWNOTE",1, 0);
+        ResultSet rs = DB.readFromDB("NOTE", 1);
+        if(rs.next())
+        assertEquals("NEWNOTE", rs.getString("name"),"TEST ALSO CHECK UPD");
+
+
+
 
     }
 
@@ -55,6 +61,9 @@ class DBTest {
     void updateGroupInDB() throws SQLException {
 
         DB.updateGroupInDB(1,"NEWGROUP",1,0);
+        ResultSet rs = DB.readFromDB("NOTE_GROUP", 1);
+        if(rs.next())
+        assertEquals("NEWGROUP", rs.getString("name"),"TEST ALSO CHECK UPD");
 
     }
 
@@ -62,22 +71,17 @@ class DBTest {
     void updateTabInDB() throws SQLException {
 
         DB.updateTabInDB(1,"NEW_TAB",0);
+        ResultSet rs = DB.readFromDB("NOTE_TAB", 1);
+        if(rs.next())
+        assertEquals("NEW_TAB", rs.getString("name"),"TEST ALSO CHECK UPD");
 
     }
 
     @Test
     void readFromDB() throws SQLException {
 
-        ResultSet rs = DB.readFromDB("NOTE_TAB", 1);
-        if(rs.next())
-        assertEquals("NEW_TAB", rs.getString("name"),"TEST ALSO CHECK UPD");
-        rs = DB.readFromDB("NOTE_GROUP", 1);
-        if(rs.next())
-        assertEquals("NEWGROUP", rs.getString("name"),"TEST ALSO CHECK UPD");
-        rs = DB.readFromDB("NOTE", 1);
-        if(rs.next())
-        assertEquals("NEW_NOTE", rs.getString("name"),"TEST ALSO CHECK UPD");
-        rs = DB.readFromDB("NOTE_TAB", 2 );
+
+        ResultSet rs = DB.readFromDB("NOTE_TAB", 2 );
         if(rs.next())
         assertEquals("TAB2", rs.getString("name"));
         rs = DB.readFromDB("NOTE_GROUP", 2);
@@ -93,7 +97,7 @@ class DBTest {
     void readNoteByGroup() throws SQLException {
 
         ResultSet rs = DB.readNoteByGroup(2);
-        rs.first();
+        if(rs.next())
         assertEquals("NOTE2", rs.getString("name"));
         assertEquals("TEST_CONTENT", rs.getString("content"));
         assertEquals(2, rs.getInt("group_id"));
@@ -105,7 +109,7 @@ class DBTest {
     void readGroupByTab() throws SQLException {
 
         ResultSet rs = DB.readGroupByTab(2);
-        rs.first();
+        if(rs.next())
         assertEquals("GROUP2", rs.getString("name"));
 
     }
@@ -115,7 +119,7 @@ class DBTest {
 
         DB.deleteNoteFromDB(1);
         ResultSet rs = DB.readNoteByGroup(1);
-        assertEquals(0,rs);
+        assertEquals(0,rs.getFetchSize());
 
     }
 
@@ -124,7 +128,7 @@ class DBTest {
         ResultSet rs = DB.readGroupByTab(1);
         DB.deleteGroupFromDB(1);
 
-        assertEquals(0,rs);
+        assertEquals(0,rs.getFetchSize());
 
     }
 
@@ -133,7 +137,7 @@ class DBTest {
 
         DB.deleteTabFromDB(1);
         ResultSet rs = DB.readFromDB("NOTE_TAB",1);
-        assertEquals(0,rs);
+        assertEquals(0, rs.getFetchSize());
 
     }
 }
