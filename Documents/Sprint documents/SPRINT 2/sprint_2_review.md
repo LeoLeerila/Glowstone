@@ -14,7 +14,8 @@ development with JavaFX, starting backend programmes  and integrating developmen
 - JaCoCo
 
 ## Demo Summary
-
+During the sprint review meeting, we presented the database diagram, the database connectivity and implemented unit tests.
+We also showcased the git repository on GitHub.
 
 ## What went well
 - We got working frondend early enough
@@ -29,7 +30,7 @@ development with JavaFX, starting backend programmes  and integrating developmen
 Next sprint, we will be working on the following
 - Improve unit testing
 - Connect backend with frontend
-- Jenkins 
+- Jenkins integration
 - Continue database implementation
 - Visual improvements to UI
 - Additional feature implementation for UI
