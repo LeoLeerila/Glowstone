@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         AppView.launch(AppView.class);
-        try {
+        /*try {
             DB.startConnection();
 
             DB.insertTabToDB("java created tab", 0);
@@ -115,6 +115,6 @@ public class Main {
             DB.endConnection();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

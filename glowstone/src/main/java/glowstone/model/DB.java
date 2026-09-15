@@ -225,4 +225,15 @@ public class DB {
         }
         return result;
     }
+    public static ResultSet readWholeTableFromDB(String table) {
+        ResultSet resultSet = null;
+        try{
+            PreparedStatement statement = db.prepareStatement("SELECT * FROM " + table + "");
+            resultSet = statement.executeQuery();
+            System.out.println("read " + table);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 }
