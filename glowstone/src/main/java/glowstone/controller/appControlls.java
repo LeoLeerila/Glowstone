@@ -5,14 +5,18 @@ import glowstone.model.Workspace;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 
 public class appControlls {
     MenuItem m_1 = new MenuItem("Add new workspace tab");
     MenuItem m_2 = new MenuItem("Add a new category");
+    @FXML
+    private StackPane scene_stackpane;
+    @FXML
+    private BorderPane main_area;
+    @FXML
+    private Pane settings_overlay;
     @FXML
     private MenuButton add_btn;
     @FXML
@@ -36,6 +40,18 @@ public class appControlls {
 
     @FXML
     public void initialize() {
+        main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
+        main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
+        settings_overlay.setVisible(false);
+        settings_btn.setOnAction(event -> {
+            settings_overlay.setVisible(!settings_overlay.isVisible());
+        });
+        settings_overlay.setOnMouseClicked(event -> {
+            if (event.getTarget() == main_area){
+                System.out.println("AAUYGWEUA");
+                settings_overlay.setVisible(false);
+            }
+        });
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
         Add_tab.setOnAction(event -> { addNewTab();});
