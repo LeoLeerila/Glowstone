@@ -164,7 +164,7 @@ public class DB {
     public static int updateTabInDB(int tabId, String name, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET name=?, thumbnail_id=? WHERE id=" + tabId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_TAB` SET name=?, thumbnail_id=? WHERE id="+ tabId);
             statement.setString(1, name);
             if (thumbnail_id == 0) {
                 statement.setObject(2, null, Types.INTEGER);

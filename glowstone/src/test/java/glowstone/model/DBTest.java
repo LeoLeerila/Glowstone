@@ -64,7 +64,7 @@ class DBTest {
         int id = 0;
         if(rs.next())
         id = rs.getInt("id");
-        DB.updateNoteInDB(id,"NEW_CONTENT","NEWNOTE",group1Id, 0);
+        DB.updateNoteInDB(id,"NEW_CONTENT","NEWNOTE",group2Id, 0);
         rs = DB.readFromDB("NOTE", id);
         if(rs.next())
         assertEquals("NEWNOTE", rs.getString("name"),"TEST ALSO CHECK UPD");
@@ -76,11 +76,11 @@ class DBTest {
 
     @Test
     void updateGroupInDB() throws SQLException {
-        ResultSet rs = DB.readNoteByGroup(group1Id);
+        ResultSet rs = DB.readNoteByGroup(group2Id);
         int id = 0;
         if(rs.next())
         id = rs.getInt("id");
-        DB.updateGroupInDB(id,"NEWGROUP",tab1Id,0);
+        DB.updateGroupInDB(id,"NEWGROUP",tab2Id,0);
         rs = DB.readFromDB("NOTE_GROUP", id);
         if(rs.next())
         assertEquals("NEWGROUP", rs.getString("name"),"TEST ALSO CHECK UPD");
@@ -121,7 +121,7 @@ class DBTest {
         if(rs.next())
         assertEquals("TEST_CONTENT", rs.getString("content"));
         if(rs.next())
-        assertEquals(2, rs.getInt("group_id"));
+        assertEquals(group2Id, rs.getInt("group_id"));
         if(rs.next())
         System.out.println("ID of the note: "+rs.getInt("id"));
 
