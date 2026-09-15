@@ -110,14 +110,14 @@
          <children>
             <VBox fx:id="settings_content" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="800.0">
                <children>
-                  <Label text="Language" textAlignment="CENTER">
+                  <Label fx:id="lang_title" text="Language" textAlignment="CENTER">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </Label>
                   <HBox fx:id="lang_options" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="109.0" prefWidth="791.0">
                      <children>
-                        <RadioButton mnemonicParsing="false" styleClass="langtoggle" text="English">
+                        <RadioButton fx:id="radio_en" mnemonicParsing="false" styleClass="langtoggle" text="English">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -125,13 +125,13 @@
                               <ToggleGroup fx:id="lang" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton mnemonicParsing="false" styleClass="langtoggle" text="Suomi" toggleGroup="$lang" />
-                        <RadioButton mnemonicParsing="false" styleClass="langtoggle" text="Русский" toggleGroup="$lang" />
+                        <RadioButton fx:id="radio_fi" mnemonicParsing="false" styleClass="langtoggle" text="Suomi" toggleGroup="$lang" />
+                        <RadioButton fx:id="radio_ru" mnemonicParsing="false" styleClass="langtoggle" text="Русский" toggleGroup="$lang" />
                      </children>
                   </HBox>
-                  <Label text="Colour scheme" />
-                  <HBox fx:id="colourscheme_options" prefHeight="100.0" prefWidth="200.0" />
-                  <Button mnemonicParsing="false" text="Exit and Save program" />
+                  <Label fx:id="colourScheme_title" text="Colour scheme" />
+                  <HBox fx:id="colourScheme_options" prefHeight="100.0" prefWidth="200.0" />
+                  <Button fx:id="exit_btn" mnemonicParsing="false" text="Exit and Save program" />
                </children></VBox>
          </children>
       </Pane>

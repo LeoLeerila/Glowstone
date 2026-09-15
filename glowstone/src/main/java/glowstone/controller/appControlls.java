@@ -2,21 +2,34 @@ package glowstone.controller;
 import glowstone.model.Category;
 import glowstone.model.Note;
 import glowstone.model.Workspace;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.util.Locale;
+
 
 public class appControlls {
-    MenuItem m_1 = new MenuItem("Add new workspace tab");
-    MenuItem m_2 = new MenuItem("Add a new category");
+    languageToggle langToggle = new languageToggle(Locale.ENGLISH);
+    MenuItem m_1;
+    MenuItem m_2;
     @FXML
     private StackPane scene_stackpane;
     @FXML
     private BorderPane main_area;
     @FXML
     private Pane settings_overlay;
+    ToggleGroup tg;
+    @FXML
+    private RadioButton radio_en;
+    @FXML
+    private RadioButton radio_fi;
+    @FXML
+    private RadioButton radio_ru;
     @FXML
     private MenuButton add_btn;
     @FXML
@@ -35,11 +48,21 @@ public class appControlls {
     private Button Add_tab;
     @FXML
     private HBox noteSpace_view;
+    @FXML
+    private Label lang_title;
+    @FXML
+    private Label colourScheme_title;
+    @FXML
+    private Button exit_btn;
 
     private Workspace currentActiveWorkspace;
 
     @FXML
     public void initialize() {
+        tg = new ToggleGroup();
+        radio_en.setToggleGroup(tg);
+        radio_fi.setToggleGroup(tg);
+        radio_ru.setToggleGroup(tg);
         main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
         main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
         settings_overlay.setVisible(false);
@@ -52,13 +75,53 @@ public class appControlls {
                 settings_overlay.setVisible(false);
             }
         });
+        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                RadioButton rb = (RadioButton)tg.getSelectedToggle();
+                if(rb == radio_en){
+                    updateTranslations();
+                    langToggle.setLocale(Locale.ENGLISH);
+                    renderWorkspace();
+                    System.out.println("YIPII");
+                } else if (rb == radio_fi){
+                    updateTranslations();
+                    langToggle.setLocale(languageToggle.FINNISH);
+                    renderWorkspace();
+                    System.out.println("YIPII");
+                } else if (rb == radio_ru){
+                    updateTranslations();
+                    langToggle.setLocale(languageToggle.RUSSIAN);
+                    renderWorkspace();
+                    System.out.println("YIPII");
+                } else {
+                    System.out.println("uhhhhhhhhhhhhhhhh no lang?");
+                }
+            }
+        });
+
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
         Add_tab.setOnAction(event -> { addNewTab();});
+        m_1 = new MenuItem(langToggle.getString("addTabBtn"));
+        m_2 = new MenuItem(langToggle.getString("addCategoryBtn"));
         m_1.setOnAction(event -> { addNewTab();});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
         loadWorkingArea();
+    }
+
+    public void updateTranslations(){
+        Platform.runLater(() ->{
+            //#YanDecCore
+            if(m_1!=null) m_1.setText(langToggle.getString("addTabBtn"));
+            if(m_2!=null) m_2.setText(langToggle.getString("addCategoryBtn"));
+            if(add_btn!=null) add_btn.setText(langToggle.getString("addMenu"));
+            if(Add_tab!=null) Add_tab.setText(langToggle.getString("addTabBtn"));
+            if(lang_title!=null) lang_title.setText(langToggle.getString("langTitle"));
+            if(colourScheme_title!=null) colourScheme_title.setText(langToggle.getString("cso_title"));
+            if(exit_btn!=null) exit_btn.setText(langToggle.getString("exitBtn"));
+        });
     }
 
     public void loadWorkingArea(){
@@ -88,13 +151,13 @@ public class appControlls {
 
     public void addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
-        Workspace workspace = new Workspace("New Tab");
+        Workspace workspace = new Workspace(langToggle.getString("newTab"));
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
         tab_btn.setOnAction(event -> {openTab(workspace);});
-        MenuItem o_1 = new MenuItem("Edit");
-        MenuItem o_2 = new MenuItem("Delete");
+        MenuItem o_1 = new MenuItem(langToggle.getString("editBtn"));
+        MenuItem o_2 = new MenuItem(langToggle.getString("deleteBtn"));
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
         o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
         o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
@@ -148,7 +211,7 @@ public class appControlls {
     public void addNewCategory(){
         if (currentActiveWorkspace == null) return;
 
-        Category category = new Category("New category");
+        Category category = new Category(langToggle.getString("newCategory"));
         currentActiveWorkspace.createCategory(category);
         renderWorkspace();
     }
@@ -188,8 +251,8 @@ public class appControlls {
     public void editCategory(Category category, HBox categoryTitle){
         TextField nameField = new TextField(category.getName());
         nameField.setPrefWidth(160);
-        Button confirm = new Button("Yas");
-        Button cancel = new Button("nvm");
+        Button confirm = new Button("✓");
+        Button cancel = new Button("x");
         confirm.setOnAction(event -> {
             String newName = nameField.getText().trim();
             if(!newName.isEmpty()) {
@@ -235,7 +298,7 @@ public class appControlls {
         HBox noteTitle = new HBox();
         Label noteName = new Label(note.getTitle());
         Button editNote = new Button("✎");
-        Button deleteNote = new Button("Delete");
+        Button deleteNote = new Button(langToggle.getString("deleteBtn"));
 
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
