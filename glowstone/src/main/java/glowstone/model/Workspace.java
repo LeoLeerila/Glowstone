@@ -11,8 +11,7 @@ public class Workspace {
 
     public Workspace(String name){
         this.name = name;
-        this.id = t_id ++; // this should later take id from created db table
-        categories = new ArrayList<Category>();
+        categories = new ArrayList<>();
     }
 
     public void createCategory(Category category){
@@ -32,6 +31,8 @@ public class Workspace {
     public String getName(){
         return name;
     }
+
+    public void setId(int id) {this.id = id;}
     public int getId(){
         return id;
     }

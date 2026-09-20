@@ -1,11 +1,14 @@
 package glowstone.controller;
 import glowstone.model.Category;
+import glowstone.model.DB;
 import glowstone.model.Note;
 import glowstone.model.Workspace;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
+import java.sql.SQLException;
 
 
 public class appControlls {
@@ -39,7 +42,7 @@ public class appControlls {
     private Workspace currentActiveWorkspace;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
         main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
         settings_overlay.setVisible(false);
@@ -58,6 +61,7 @@ public class appControlls {
         m_1.setOnAction(event -> { addNewTab();});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
+        DB.startConnection();
         loadWorkingArea();
     }
 
@@ -65,7 +69,7 @@ public class appControlls {
         noteSpace_view.getChildren().clear();
         tab_column.getChildren().clear();
 
-        //replace later with code to get stuff from the DB
+        //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
         addNewTab();
     }
     public void openTab(Workspace workspace){
@@ -89,6 +93,8 @@ public class appControlls {
     public void addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
         Workspace workspace = new Workspace("New Tab");
+        int tabId = DB.insertTabToDB(workspace.getName(),0);//thumbnail stuff is missing
+        workspace.setId(tabId);
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
@@ -124,6 +130,7 @@ public class appControlls {
             if(!newName.isEmpty()){
                 workspace.setName(newName);
                 tabbtn.setText(newName);
+                DB.updateTabInDB(workspace.getId(),workspace.getName(),0);//thumbnail stuff is missing
                 if (currentActiveWorkspace == workspace){
                     currentTabName_title.setText(newName);
                 }
@@ -149,6 +156,8 @@ public class appControlls {
         if (currentActiveWorkspace == null) return;
 
         Category category = new Category("New category");
+        int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId(),0);
+        category.setId(id);
         currentActiveWorkspace.createCategory(category);
         renderWorkspace();
     }
@@ -156,6 +165,8 @@ public class appControlls {
         System.out.println("Happening");
         Note note = new Note("New Note");
         note.setContent("");
+        int id = DB.insertNoteToDB(note.content, note.title, category.getId(), 0); //still the thing with the thing which is the thing with... thumbnail..
+        note.setId(id);
         category.addNotes(note);
         renderWorkspace();
     }

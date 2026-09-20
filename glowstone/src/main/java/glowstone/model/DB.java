@@ -36,6 +36,15 @@ public class DB {
             }
             result = statement.executeUpdate();
             System.out.println("inserted into NOTE");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("no NoteId obtained");
+                }
+            } catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +65,15 @@ public class DB {
             }
             result = statement.executeUpdate();
             System.out.println("inserted into NOTE_GROUP");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("no GroupId obtained");
+                }
+            } catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,6 +93,15 @@ public class DB {
             }
             result = statement.executeUpdate();
             System.out.println("inserted into NOTE_TAB");
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("no TabId obtained");
+                }
+            } catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,12 +10,13 @@ public class Note {
 
     public Note(String title){
         this.title = title;
-        this.id = t_id ++; // this should later take id from created db table
     }
 
     public int getParentId() {
         return parentId;
     }
+
+    public void setId(int id) {this.id = id;}
 
     public void setParentId(int parentId) {
         this.parentId = parentId;

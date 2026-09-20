@@ -12,8 +12,6 @@ public class Category {
 
     public Category(String name){
         this.name = name;
-        this.id = t_id ++;// this should later take id from created db table
-        notes = new ArrayList<Note>();
     }
 
     public int getParentId() {
