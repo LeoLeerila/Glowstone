@@ -1,12 +1,8 @@
 package glowstone.model;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 public class DB {
     private static Connection db = null;
@@ -25,7 +21,7 @@ public class DB {
     public static int insertNoteToDB(String content, String name, int group_id, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
@@ -35,16 +31,14 @@ public class DB {
                 statement.setInt(4, thumbnail_id);
             }
             result = statement.executeUpdate();
-            System.out.println("inserted into NOTE");
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     result = generatedKeys.getInt(1);
                 } else {
-                    throw new SQLException("no NoteId obtained");
+                    throw new SQLException("Note creation failed: no ID was obtained.");
                 }
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e);
             }
+            System.out.println("inserted into NOTE");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +49,7 @@ public class DB {
     public static int insertGroupToDB(String name, int tab_id, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setInt(2, tab_id);
             if (thumbnail_id == 0) {
@@ -64,16 +58,14 @@ public class DB {
                 statement.setInt(3, thumbnail_id);
             }
             result = statement.executeUpdate();
-            System.out.println("inserted into NOTE_GROUP");
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     result = generatedKeys.getInt(1);
                 } else {
-                    throw new SQLException("no GroupId obtained");
+                    throw new SQLException("Category creation failed: no ID was obtained.");
                 }
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e);
             }
+            System.out.println("inserted into NOTE_GROUP");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,7 +76,7 @@ public class DB {
     public static int insertTabToDB(String name, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             if (thumbnail_id == 0) {
                 statement.setObject(2, null, Types.INTEGER);
@@ -92,16 +84,14 @@ public class DB {
                 statement.setInt(2, thumbnail_id);
             }
             result = statement.executeUpdate();
-            System.out.println("inserted into NOTE_TAB");
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     result = generatedKeys.getInt(1);
                 } else {
-                    throw new SQLException("no TabId obtained");
+                    throw new SQLException("Tab creation failed: no ID was obtained.");
                 }
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e);
             }
+            System.out.println("inserted into NOTE_TAB");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,7 +8,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
 public class appControlls {
@@ -57,20 +59,42 @@ public class appControlls {
         });
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
-        Add_tab.setOnAction(event -> { addNewTab();});
-        m_1.setOnAction(event -> { addNewTab();});
+        Add_tab.setOnAction(event -> { loadTab(addNewTab());});
+        m_1.setOnAction(event -> { loadTab(addNewTab());});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
         DB.startConnection();
         loadWorkingArea();
     }
 
-    public void loadWorkingArea(){
+    public void loadWorkingArea() throws SQLException {
         noteSpace_view.getChildren().clear();
         tab_column.getChildren().clear();
 
         //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
-        addNewTab();
+        ResultSet tabs = DB.readWholeTableFromDB("NOTE_TAB");
+        while(tabs.next()){
+            Workspace tab = new Workspace(tabs.getString("name"));
+            tab.setId(tabs.getInt("id"));
+            ResultSet groups = DB.readGroupByTab(tab.getId());
+            while(groups.next()){
+                Category category = new Category(groups.getString("name"));
+                category.setId(groups.getInt("id"));
+                tab.createCategory(category);
+                ResultSet notes = DB.readNoteByGroup(category.getId());
+                while(notes.next()){
+                    Note note = new Note(notes.getString("name"));
+                    note.setId(notes.getInt("id"));
+                    note.setContent(notes.getString("content"));
+                    category.addNotes(note);
+                    System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+                }
+                System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
+            }
+            loadTab(tab);
+            System.out.println("Loaded tab with: "+tab.getId());
+        }
+
     }
     public void openTab(Workspace workspace){
         //clear workspace
@@ -90,11 +114,16 @@ public class appControlls {
         }
     }
 
-    public void addNewTab(){
+    public Workspace addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
         Workspace workspace = new Workspace("New Tab");
         int tabId = DB.insertTabToDB(workspace.getName(),0);//thumbnail stuff is missing
         workspace.setId(tabId);
+        System.out.println("Tab with id: "+workspace.getId()+ ", should be: "+tabId);
+        return workspace;
+    }
+
+    public void loadTab(Workspace workspace){
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
@@ -109,6 +138,8 @@ public class appControlls {
         tab_column.setFillWidth(true);
         openTab(workspace);
     }
+
+
     private void editTab(Workspace workspace, Button tabbtn, MenuButton m){
         HBox container = new HBox(5);
         TextField nameField = new TextField(workspace.getName());
@@ -158,6 +189,8 @@ public class appControlls {
         Category category = new Category("New category");
         int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId(),0);
         category.setId(id);
+        category.setParentId(currentActiveWorkspace.getId());
+        System.out.println("Category Id with TabID: "+category.getId()+" / "+category.getParentId()+", C.Id should be: "+id);
         currentActiveWorkspace.createCategory(category);
         renderWorkspace();
     }
