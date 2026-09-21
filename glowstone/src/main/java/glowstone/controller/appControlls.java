@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -80,18 +81,18 @@ public class appControlls {
             public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
                 RadioButton rb = (RadioButton)tg.getSelectedToggle();
                 if(rb == radio_en){
-                    updateTranslations();
                     langToggle.setLocale(Locale.ENGLISH);
+                    updateTranslations();
                     renderWorkspace();
                     System.out.println("YIPII");
                 } else if (rb == radio_fi){
-                    updateTranslations();
                     langToggle.setLocale(languageToggle.FINNISH);
+                    updateTranslations();
                     renderWorkspace();
                     System.out.println("YIPII");
                 } else if (rb == radio_ru){
-                    updateTranslations();
                     langToggle.setLocale(languageToggle.RUSSIAN);
+                    updateTranslations();
                     renderWorkspace();
                     System.out.println("YIPII");
                 } else {
@@ -113,7 +114,7 @@ public class appControlls {
 
     public void updateTranslations(){
         Platform.runLater(() ->{
-            //#YanDecCore
+            //#YanDevCore
             if(m_1!=null) m_1.setText(langToggle.getString("addTabBtn"));
             if(m_2!=null) m_2.setText(langToggle.getString("addCategoryBtn"));
             if(add_btn!=null) add_btn.setText(langToggle.getString("addMenu"));
@@ -121,6 +122,19 @@ public class appControlls {
             if(lang_title!=null) lang_title.setText(langToggle.getString("langTitle"));
             if(colourScheme_title!=null) colourScheme_title.setText(langToggle.getString("cso_title"));
             if(exit_btn!=null) exit_btn.setText(langToggle.getString("exitBtn"));
+            for(Node n : tab_column.getChildren()){
+                if(n instanceof Button){
+                    Button b = (Button) n;
+                    if(b.getGraphic() instanceof MenuButton){
+                        MenuButton mb = (MenuButton) b.getGraphic();
+                        for(MenuItem mi : mb.getItems()){
+                            String id = mi.getId();
+                            if("editTab".equals(id)) mi.setText(langToggle.getString("editBtn"));
+                            else if("deleteTab".equals(id)) mi.setText(langToggle.getString("deleteBtn"));
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -134,7 +148,6 @@ public class appControlls {
     public void openTab(Workspace workspace){
         //clear workspace
         //fetch data for the specific tab based on some sort of ID
-        System.out.println("On this tab!");
         currentActiveWorkspace = workspace;
         currentTabName_title.setText(currentActiveWorkspace.getName());
         renderWorkspace();
@@ -159,6 +172,8 @@ public class appControlls {
         MenuItem o_1 = new MenuItem(langToggle.getString("editBtn"));
         MenuItem o_2 = new MenuItem(langToggle.getString("deleteBtn"));
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
+        o_1.setId("editTab");
+        o_2.setId("deleteTab");
         o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
         o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
         tab_btn.setGraphic(m);
@@ -216,8 +231,7 @@ public class appControlls {
         renderWorkspace();
     }
     private void addNoteToCategory(Category category){
-        System.out.println("Happening");
-        Note note = new Note("New Note");
+        Note note = new Note(langToggle.getString("noteTitle"));
         note.setContent("");
         category.addNotes(note);
         renderWorkspace();
