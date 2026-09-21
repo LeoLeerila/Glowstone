@@ -94,6 +94,7 @@ public class appControlls {
             loadTab(tab);
             System.out.println("Loaded tab with: "+tab.getId());
         }
+        //if(tab_column.getChildren().isEmpty()){loadTab(addNewTab());} //idk if needed
 
     }
     public void openTab(Workspace workspace){
@@ -132,7 +133,7 @@ public class appControlls {
         MenuItem o_2 = new MenuItem("Delete");
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
         o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
-        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
+        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);DB.deleteTabFromDB(workspace.getId());});
         tab_btn.setGraphic(m);
         tab_column.getChildren().add(tab_btn);
         tab_column.setFillWidth(true);
@@ -201,6 +202,7 @@ public class appControlls {
         int id = DB.insertNoteToDB(note.content, note.title, category.getId(), 0); //still the thing with the thing which is the thing with... thumbnail..
         note.setId(id);
         category.addNotes(note);
+        System.out.println("Added Note with: "+note.getId()+" with category: "+note.getParentId());
         renderWorkspace();
     }
     private VBox buildCategoryNode(Category category){
@@ -216,6 +218,7 @@ public class appControlls {
         categoryEdit.setOnAction(event -> { editCategory(category, categoryTitle);});
         categoryDelete.setOnAction(event -> {
             currentActiveWorkspace.removeCategory(category);
+            DB.deleteGroupFromDB(category.getId());
             renderWorkspace();
         });
         categoryEdit.getStyleClass().add("editing_btns");
@@ -238,6 +241,7 @@ public class appControlls {
             String newName = nameField.getText().trim();
             if(!newName.isEmpty()) {
                 category.setName(newName);
+                DB.updateGroupInDB(category.getId(), category.getName(), currentActiveWorkspace.getId(),0); // yay thumbnail :D
             }
             renderWorkspace();
         });
@@ -260,6 +264,7 @@ public class appControlls {
         confirm.setOnAction(event -> {
             note.setTitle(titleField.getText().trim());
             note.setContent(contentField.getText());
+            DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),0); //thumbnail thingy
             renderWorkspace();
         });
         cancel.setOnAction(event -> {
@@ -284,6 +289,7 @@ public class appControlls {
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
             category.removeNotes(note);
+            DB.deleteNoteFromDB(note.getId());
             renderWorkspace();
         });
 
