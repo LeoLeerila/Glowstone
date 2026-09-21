@@ -81,6 +81,51 @@ public class DB {
         return result;
     }
 
+    public static int insertNoteToDB(String content, String name, int group_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)");
+            statement.setString(1, content);
+            statement.setString(2, name);
+            statement.setInt(3, group_id);
+            statement.setObject(4, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int insertGroupToDB(String name, int tab_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)");
+            statement.setString(1, name);
+            statement.setInt(2, tab_id);
+            statement.setObject(3, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_GROUP");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int insertTabToDB(String name){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)");
+            statement.setString(1, name);
+            statement.setObject(2, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_TAB");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     //read
     public static ResultSet readFromDB(String table, int id) {
         ResultSet resultSet = null;
@@ -164,7 +209,7 @@ public class DB {
     public static int updateTabInDB(int tabId, String name, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET name=?, thumbnail_id=? WHERE id=" + tabId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_TAB` SET name=?, thumbnail_id=? WHERE id="+ tabId);
             statement.setString(1, name);
             if (thumbnail_id == 0) {
                 statement.setObject(2, null, Types.INTEGER);
@@ -173,6 +218,52 @@ public class DB {
             }
             result = statement.executeUpdate();
             System.out.println("inserted into NOTE_TAB");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    public static int updateGroupInDB(int groupId, String name, int tab_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_GROUP` SET name=?, tab_id=?, thumbnail_id=? WHERE id=" + groupId);
+            statement.setString(1, name);
+            statement.setInt(2, tab_id);
+            statement.setObject(3, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_GROUP");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int updateTabInDB(int tabId, String name){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_TAB` SET name=?, thumbnail_id=? WHERE id="+ tabId);
+            statement.setString(1, name);
+            statement.setObject(2, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE_TAB");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int updateNoteInDB(int noteId, String content, String name, int group_id){
+        int result = 0;
+        try {
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, thumbnail_id=? WHERE id=" + noteId);
+            statement.setString(1, content);
+            statement.setString(2, name);
+            statement.setInt(3, group_id);
+            statement.setObject(4, null, Types.INTEGER);
+            result = statement.executeUpdate();
+            System.out.println("inserted into NOTE");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -217,12 +308,23 @@ public class DB {
             while (rs.next()) {
                 deleteGroupFromDB(rs.getInt("id"));
             }
-            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_TAB` WHERE `id` = '" + id + "'");
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_TAB` WHERE `id` = '" + id + "'" );
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE");
         } catch (Exception e){
             e.printStackTrace();
         }
         return result;
+    }
+    public static ResultSet readWholeTableFromDB(String table) {
+        ResultSet resultSet = null;
+        try{
+            PreparedStatement statement = db.prepareStatement("SELECT * FROM " + table + "");
+            resultSet = statement.executeQuery();
+            System.out.println("read " + table);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }
