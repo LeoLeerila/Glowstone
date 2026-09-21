@@ -84,17 +84,14 @@ public class appControlls {
                     langToggle.setLocale(Locale.ENGLISH);
                     updateTranslations();
                     renderWorkspace();
-                    System.out.println("YIPII");
                 } else if (rb == radio_fi){
                     langToggle.setLocale(languageToggle.FINNISH);
                     updateTranslations();
                     renderWorkspace();
-                    System.out.println("YIPII");
                 } else if (rb == radio_ru){
                     langToggle.setLocale(languageToggle.RUSSIAN);
                     updateTranslations();
                     renderWorkspace();
-                    System.out.println("YIPII");
                 } else {
                     System.out.println("uhhhhhhhhhhhhhhhh no lang?");
                 }
@@ -114,7 +111,6 @@ public class appControlls {
 
     public void updateTranslations(){
         Platform.runLater(() ->{
-            //#YanDevCore
             if(m_1!=null) m_1.setText(langToggle.getString("addTabBtn"));
             if(m_2!=null) m_2.setText(langToggle.getString("addCategoryBtn"));
             if(add_btn!=null) add_btn.setText(langToggle.getString("addMenu"));
@@ -242,6 +238,9 @@ public class appControlls {
         HBox categoryTitle = new HBox();
         categoryTitle.getStyleClass().add("category_title");
         Label categoryName = new Label(category.getName());
+        Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.ALWAYS);
+        pane.getChildren().add(categoryName);
         Button addNote = new Button("+");
         Button categoryEdit = new Button("✎");
         Button categoryDelete = new Button(":(");
@@ -251,9 +250,8 @@ public class appControlls {
             currentActiveWorkspace.removeCategory(category);
             renderWorkspace();
         });
-        categoryEdit.getStyleClass().add("editing_btns");
 
-        categoryTitle.getChildren().addAll(categoryName, addNote, categoryEdit, categoryDelete);
+        categoryTitle.getChildren().addAll(pane, addNote, categoryEdit, categoryDelete);
 
         VBox notesContainer = new VBox();
         for(Note note : category.getNotes()){
@@ -310,7 +308,11 @@ public class appControlls {
         noteInstance.getStyleClass().add("note_card");
 
         HBox noteTitle = new HBox();
+        noteTitle.getStyleClass().add("note_title");
         Label noteName = new Label(note.getTitle());
+        Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.ALWAYS);
+        pane.getChildren().add(noteName);
         Button editNote = new Button("✎");
         Button deleteNote = new Button(langToggle.getString("deleteBtn"));
 
@@ -327,7 +329,7 @@ public class appControlls {
         noteInstance.setMaxWidth(Double.MAX_VALUE);
         theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
         noteContents.getChildren().add(theStuff);
-        noteTitle.getChildren().addAll(noteName, editNote, deleteNote);
+        noteTitle.getChildren().addAll(pane, editNote, deleteNote);
         noteInstance.getChildren().addAll(noteTitle, noteContents);
         return noteInstance;
     }

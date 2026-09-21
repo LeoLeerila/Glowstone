@@ -2,13 +2,13 @@
     -fx-background-color: #b2c5e3;
     -fx-font-family: "JetBrains Mono Light";
     very-light: #bcbef1;
-    light-blue: #8286d9;
-    custom-blue: #6d71bf;
+    light-colour: #8286d9;
+    custom-colour: #6d71bf;
+    dark: #443f83;
 }
 .settingsOverlay {
-    -fx-background-color: custom-blue;
+    -fx-background-color: custom-colour;
 }
-
 .langtoggle {
     -fx-padding: 40;
 }
@@ -17,32 +17,60 @@
     -fx-spacing: 8;
 }
 .button {
-    -fx-background-color: light-blue;
+    -fx-background-color: light-colour;
+    -fx-border-color: dark;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+.colourScheme_container {
+    -fx-spacing: 12;
+}
+#blueTheme_btn:pressed, #darkTheme_btn:pressed, #lightTheme_btn:pressed, #pinkTheme_btn:pressed, #eyestrainTheme_btn:pressed {
+    -fx-background-color: very-light;
+}
+#blueTheme_btn {
+    -fx-background-color: #8286d9;
+    -fx-border-color: #443f83;
+}
+#lightTheme_btn {
+    -fx-background-color: #d1d1d3;
     -fx-border-color: none;
+}
+#darkTheme_btn {
+    -fx-background-color: #5e5d60;
+    -fx-border-color: none;
+}
+#pinkTheme_btn {
+    -fx-background-color: #e88bc2;
+    -fx-border-color: none;
+}
+#eyestrainTheme_btn {
+    -fx-background-color: #37bc47;
+    -fx-border-color: #00ff51;
 }
 
 .tool-bar {
-    -fx-background-color: custom-blue;
+    -fx-background-color: custom-colour;
     -fx-padding: 8;
     -fx-spacing: 8;
 
 }
 
 .left_column {
-    -fx-border-color: custom-blue;
+    -fx-border-color: dark;
     -fx-pref-width: 220;
     -fx-max-width: 250;
 }
 
 .column_btn {
     -fx-padding: 2px;
-    -fx-background-color: light-blue;
+    -fx-background-color: light-colour;
     -fx-content-display: right;
     -fx-pref-width: 220;
     -fx-max-width: 350;
 }
 .add_clmn_btn {
-    -fx-background-color: custom-blue;
+    -fx-background-color: custom-colour;
     -fx-pref-width: 220;
     -fx-max-width: 350;
 }
@@ -56,7 +84,7 @@
 }
 
 .category_view {
-    -fx-border-color: custom-blue;
+    -fx-border-color: dark;
     -fx-pref-width: 264.0;
 }
 
@@ -76,4 +104,7 @@
     -fx-background-insets: 5px;
     -fx-min-width: 0;
     -fx-max-width: 10000;
+}
+.note_title {
+    -fx-spacing: 10;
 }

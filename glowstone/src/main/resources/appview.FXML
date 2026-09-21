@@ -20,7 +20,7 @@
 
 <StackPane fx:id="scene_stackpane" prefHeight="700" prefWidth="1200" stylesheets="@styles_lightblue.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="glowstone.controller.appControlls">
    <children>
-      <BorderPane fx:id="main_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700" prefWidth="1200" stylesheets="@styles_lightblue.css">
+      <BorderPane fx:id="main_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700" prefWidth="1200">
          <top>
             <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="848.0" BorderPane.alignment="TOP_LEFT">
                <children>
@@ -37,14 +37,14 @@
                       <Button fx:id="search_btn" layoutX="310.0" mnemonicParsing="false" prefHeight="26.0" text="🔍" />
                      </children>
                   </AnchorPane>
-                  <Pane fx:id="currentTabName_container" prefHeight="59.0" prefWidth="442.0" HBox.hgrow="ALWAYS">
+                  <Pane fx:id="currentTabName_container" prefHeight="27.0" prefWidth="684.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="currentTabName_title" alignment="CENTER" contentDisplay="CENTER" layoutX="338.0" layoutY="5.0" text="CurrentTabName" />
                      </children>
                   </Pane>
                   <Pane fx:id="settings_container" prefHeight="27.0" prefWidth="52.0">
                      <children>
-                        <Button fx:id="settings_btn" alignment="CENTER" contentDisplay="TOP" layoutX="8.0" layoutY="1.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="28.0" text="✱" textAlignment="CENTER" />
+                        <Button fx:id="settings_btn" alignment="CENTER" contentDisplay="TOP" layoutX="4.0" layoutY="1.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="32.0" text="✱" textAlignment="CENTER" />
                      </children>
                   </Pane>
                </children>
@@ -130,7 +130,18 @@
                      </children>
                   </HBox>
                   <Label fx:id="colourScheme_title" text="Colour scheme" />
-                  <HBox fx:id="colourScheme_options" prefHeight="100.0" prefWidth="200.0" />
+                  <HBox fx:id="colourScheme_options" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="colourScheme_container">
+                     <children>
+                        <Button id="lightTheme_btn" fx:id="light_mode" mnemonicParsing="false" styleClass="themeButton" text="Light theme">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                        <Button id="darkTheme_btn" fx:id="dark_mode" mnemonicParsing="false" styleClass="themeButton" text="Dark theme" />
+                        <Button id="pinkTheme_btn" fx:id="pink_mode" mnemonicParsing="false" styleClass="themeButton" text="Pink theme" />
+                        <Button id="blueTheme_btn" fx:id="blue_mode" mnemonicParsing="false" styleClass="themeButton" text="Blue theme" />
+                        <Button id="eyestrainTheme_btn" fx:id="eyestrain_mode" mnemonicParsing="false" styleClass="themeButton" text="Eyestrain" />
+                     </children></HBox>
                   <Button fx:id="exit_btn" mnemonicParsing="false" text="Exit and Save program" />
                </children></VBox>
          </children>
