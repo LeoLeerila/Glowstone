@@ -1,10 +1,10 @@
 .root {
-    -fx-background-color: #b2c5e3;
+    -fx-background-color: #f7f8f8;
     -fx-font-family: "JetBrains Mono Light";
-    very-light: #bcbef1;
-    light-colour: #8286d9;
-    custom-colour: #6d71bf;
-    dark: #443f83;
+    very-light: #ffffff;
+    light-colour: #d1d1d3;
+    custom-colour: #939393;
+    dark: #515151;
 }
 .settingsOverlay {
     -fx-background-color: custom-colour;
@@ -104,7 +104,4 @@
     -fx-background-insets: 5px;
     -fx-min-width: 0;
     -fx-max-width: 10000;
-}
-.note_title {
-    -fx-spacing: 10;
 }

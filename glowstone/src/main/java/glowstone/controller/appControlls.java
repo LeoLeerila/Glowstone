@@ -15,7 +15,8 @@ import java.util.Locale;
 
 
 public class appControlls {
-    languageToggle langToggle = new languageToggle(Locale.ENGLISH);
+    private final languageToggle langToggle = new languageToggle(Locale.ENGLISH);
+    private final SwitchTheme themeSwitcher = new SwitchTheme();
     MenuItem m_1;
     MenuItem m_2;
     @FXML
@@ -31,6 +32,16 @@ public class appControlls {
     private RadioButton radio_fi;
     @FXML
     private RadioButton radio_ru;
+    @FXML
+    private Button light_mode;
+    @FXML
+    private Button dark_mode;
+    @FXML
+    private Button blue_mode;
+    @FXML
+    private Button pink_mode;
+    @FXML
+    private Button eyestrain_mode;
     @FXML
     private MenuButton add_btn;
     @FXML
@@ -97,6 +108,11 @@ public class appControlls {
                 }
             }
         });
+        light_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "light");});
+        blue_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "blue");});
+        dark_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "dark");});
+        pink_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "pink");});
+        eyestrain_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "eyestrain");});
 
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();

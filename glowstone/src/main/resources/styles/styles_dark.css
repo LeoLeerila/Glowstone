@@ -1,0 +1,125 @@
+.root {
+    -fx-background-color: #4a494c;
+    -fx-font-family: "JetBrains Mono Light";
+    -fx-text-background-color: fff;
+    very-light: #8e8d8d;
+    light-colour: #6c6c6e;
+    custom-colour: #504f4f;
+    dark: #2b292c;
+}
+
+.settingsOverlay {
+    -fx-background-color: dark;
+}
+.langtoggle {
+    -fx-padding: 40;
+}
+.header {
+    -fx-padding: 8;
+    -fx-spacing: 8;
+}
+.button {
+    -fx-background-color: light-colour;
+    -fx-border-color: dark;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: #fff;
+}
+.menu-button {
+    -fx-background-color: custom-colour;
+}
+.menu-button .label {
+    -fx-text-fill: #fff;
+}
+.menu-item {
+    -fx-background-color: custom-colour;
+}
+.menu-item .label {
+    -fx-text-fill: #fff;
+}
+.menu-button:hover, .menu-item:hover {
+    -fx-opacity: 0.5;
+}
+.colourScheme_container {
+    -fx-spacing: 12;
+}
+#blueTheme_btn:pressed, #darkTheme_btn:pressed, #lightTheme_btn:pressed, #pinkTheme_btn:pressed, #eyestrainTheme_btn:pressed {
+    -fx-background-color: very-light;
+}
+#blueTheme_btn {
+    -fx-background-color: #8286d9;
+    -fx-border-color: #443f83;
+}
+#lightTheme_btn {
+    -fx-background-color: #d1d1d3;
+    -fx-border-color: none;
+}
+#darkTheme_btn {
+    -fx-background-color: #5e5d60;
+    -fx-border-color: none;
+}
+#pinkTheme_btn {
+    -fx-background-color: #e88bc2;
+    -fx-border-color: none;
+}
+#eyestrainTheme_btn {
+    -fx-background-color: #37bc47;
+    -fx-border-color: #00ff51;
+}
+
+.tool-bar {
+    -fx-background-color: dark;
+    -fx-padding: 8;
+    -fx-spacing: 8;
+
+}
+
+.left_column {
+    -fx-border-color: dark;
+    -fx-pref-width: 220;
+    -fx-max-width: 250;
+}
+
+.column_btn {
+    -fx-padding: 2px;
+    -fx-background-color: light-colour;
+    -fx-content-display: right;
+    -fx-pref-width: 220;
+    -fx-max-width: 350;
+}
+.add_clmn_btn {
+    -fx-background-color: custom-colour;
+    -fx-pref-width: 220;
+    -fx-max-width: 350;
+}
+.editing_btns {
+    -fx-background-color: white;
+    -fx-padding: 2;
+    -fx-border-color: none;
+}
+.column_btn:pressed, .button:pressed, .add_clmn_btn:pressed {
+    -fx-background-color: very-light;
+}
+
+.category_view {
+    -fx-border-color: dark;
+    -fx-pref-width: 264.0;
+}
+
+.category_title {
+    -fx-background-color: very-light;
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.note_card {
+    -fx-background-color: very-light;
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-min-width: 0;
+    -fx-max-width: 10000;
+}

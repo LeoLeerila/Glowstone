@@ -18,18 +18,6 @@ public class languageToggle {
         this.locale = newLocale;
         this.translations = ResourceBundle.getBundle(bundleBasename, locale);
     }
-    public void toggleLanguage(String lang){
-        if(Objects.equals(lang, "en")){
-            setLocale(Locale.ENGLISH);
-        } else if (Objects.equals(lang, "fi")){
-            setLocale(FINNISH);
-        } else if(Objects.equals(lang, "ru")){
-            setLocale(RUSSIAN);
-            System.out.println("Switched to russian :3");
-        } else {
-            setLocale(Locale.ENGLISH);
-        }
-    }
     public String getString(String key){
         return translations.getString(key);
     }
