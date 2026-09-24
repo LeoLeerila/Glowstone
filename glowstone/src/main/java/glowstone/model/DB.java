@@ -4,8 +4,6 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
