@@ -1,5 +1,6 @@
 package glowstone.model;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -126,11 +127,11 @@ public class DB {
         return result;
     }
 
-    public static int insertThumbnailToDB(String blobData){
+    public static int insertThumbnailToDB(FileInputStream blobData){
         int result = 0;
         try {
             PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)");
-            statement.setString(1, blobData);
+            statement.setBlob(1, blobData);
             result = statement.executeUpdate();
             System.out.println("inserted into THUMBNAIL");
         } catch (Exception e) {
