@@ -9,6 +9,7 @@ public class Category {
     private int id;
     public String name;
     public List<Note> notes = new ArrayList<>();
+    private List<CategoryTag> tags = new ArrayList<>();
 
     public Category(String name){
         this.name = name;
@@ -51,4 +52,17 @@ public class Category {
         return notes;
     }
 
+    public void addTag(CategoryTag tag) {
+        if (!tags.contains(tag)) {
+            tags.add(tag);
+        }
+    }
+
+    public void removeTag(CategoryTag tag) {
+        tags.remove(tag);
+    }
+
+    public List<CategoryTag> getTags() {
+        return tags;
+    }
 }
