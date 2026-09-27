@@ -88,9 +88,9 @@
          <center>
             <HBox fx:id="center_Hbox" prefWidth="1294.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fx:id="center_scrollbar" maxWidth="-Infinity" pannable="true" HBox.hgrow="ALWAYS">
+                  <ScrollPane fx:id="center_scrollbar" maxWidth="-Infinity" pannable="true" HBox.hgrow="ALWAYS" styleClass="noteSpace_view">
                      <content>
-                        <HBox fx:id="noteSpace_view" maxWidth="-Infinity" spacing="12.0" styleClass="noteSpace_view">
+                        <HBox fx:id="noteSpace_view" maxWidth="-Infinity" spacing="12.0" styleClass="noteSpace_view" fillHeight="false">
                            <children>
                               <VBox fx:id="category_view" prefHeight="538.0" prefWidth="264.0" styleClass="category_view">
                                  <children>

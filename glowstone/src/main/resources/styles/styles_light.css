@@ -1,6 +1,7 @@
 .root {
     -fx-background-color: #f7f8f8;
     -fx-font-family: "JetBrains Mono Light";
+    background: #f7f8f8;
     very-light: #ffffff;
     light-colour: #d1d1d3;
     custom-colour: #939393;
@@ -8,6 +9,12 @@
 }
 .settingsOverlay {
     -fx-background-color: custom-colour;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
 }
 .langtoggle {
     -fx-padding: 40;
@@ -62,6 +69,10 @@
     -fx-max-width: 250;
 }
 
+.left_scrollpane {
+    -fx-background: very-light;
+}
+
 .column_btn {
     -fx-padding: 2px;
     -fx-background-color: light-colour;
@@ -82,10 +93,13 @@
 .column_btn:pressed, .button:pressed, .add_clmn_btn:pressed {
     -fx-background-color: very-light;
 }
-
+.noteSpace_view {
+    -fx-background-color: background;
+}
 .category_view {
     -fx-border-color: dark;
     -fx-pref-width: 264.0;
+    -fx-background-color: background;
 }
 
 .category_title {

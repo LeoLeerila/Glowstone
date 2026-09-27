@@ -27,6 +27,12 @@ public class appControlls {
     private Pane settings_overlay;
     ToggleGroup tg;
     @FXML
+    private HBox center_Hbox;
+    @FXML
+    private ScrollPane center_scrollbar;
+    @FXML
+    private ScrollPane left_scrollpane;
+    @FXML
     private RadioButton radio_en;
     @FXML
     private RadioButton radio_fi;
@@ -72,6 +78,9 @@ public class appControlls {
     @FXML
     public void initialize() {
         tg = new ToggleGroup();
+        left_scrollpane.setFitToWidth(true);
+        center_scrollbar.setFitToWidth(false);
+
         radio_en.setToggleGroup(tg);
         radio_fi.setToggleGroup(tg);
         radio_ru.setToggleGroup(tg);
