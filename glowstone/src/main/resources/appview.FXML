@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="scene_stackpane" prefHeight="700" prefWidth="1200" stylesheets="@/styles/styles_lightblue.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="glowstone.controller.appControlls">
+<StackPane fx:id="scene_stackpane" prefHeight="700" prefWidth="1200" stylesheets="@styles/styles_lightblue.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="glowstone.controller.appControlls">
    <children>
       <BorderPane fx:id="main_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700" prefWidth="1200">
          <top>
@@ -57,18 +58,22 @@
          <left>
             <VBox fx:id="left_column" maxWidth="Infinity" prefHeight="538.0" prefWidth="139.0" styleClass="left_column" stylesheets="@styles_lightblue.css" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="tab_column" prefHeight="499.0" prefWidth="111.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="tab_btn" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="31.0" prefWidth="218.0" styleClass="column_btn" stylesheets="@styles_lightblue.css" text="Default workspace">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                           <graphic>
-                              <ChoiceBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="24.0" styleClass="editing_btns" />
-                           </graphic>
-                        </Button>
-                     </children>
-                  </VBox>
+                  <ScrollPane fx:id="left_scrollpane" styleClass="left_scrollpane" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox fx:id="tab_column" prefHeight="499.0" prefWidth="111.0">
+                           <children>
+                              <Button fx:id="tab_btn" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="31.0" prefWidth="218.0" styleClass="column_btn" stylesheets="@styles_lightblue.css" text="Default workspace">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                                 <graphic>
+                                    <ChoiceBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="19.0" prefWidth="24.0" styleClass="editing_btns" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
                   <Button fx:id="Add_tab" mnemonicParsing="false" prefHeight="31.0" prefWidth="199.0" styleClass="add_clmn_btn" stylesheets="@styles_lightblue.css" text="Add tab">
                      <font>
                         <Font size="10.0" />
@@ -81,27 +86,32 @@
             </VBox>
          </left>
          <center>
-            <HBox fx:id="noteSpace_view" BorderPane.alignment="CENTER">
+            <HBox fx:id="center_Hbox" prefWidth="1294.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="category_view" prefHeight="538.0" prefWidth="264.0" styleClass="category_view">
-                     <children>
-                        <HBox fx:id="category_title" alignment="CENTER" prefHeight="39.0" prefWidth="190.0" styleClass="category_title">
+                  <ScrollPane fx:id="center_scrollbar" maxWidth="-Infinity" pannable="true" HBox.hgrow="ALWAYS">
+                     <content>
+                        <HBox fx:id="noteSpace_view" maxWidth="-Infinity" spacing="12.0" styleClass="noteSpace_view">
                            <children>
-                              <Label alignment="CENTER" prefHeight="35.0" prefWidth="158.0" text="CategoryName" />
-                              <Button mnemonicParsing="false" prefHeight="17.0" prefWidth="22.0" styleClass="editing_btns" text="✎" />
+                              <VBox fx:id="category_view" prefHeight="538.0" prefWidth="264.0" styleClass="category_view">
+                                 <children>
+                                    <HBox fx:id="category_title" alignment="CENTER" prefHeight="39.0" prefWidth="190.0" styleClass="category_title">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="35.0" prefWidth="158.0" text="CategoryName" />
+                                          <Button mnemonicParsing="false" prefHeight="17.0" prefWidth="22.0" styleClass="editing_btns" text="✎" />
+                                       </children>
+                                    </HBox>
+                                    <VBox fx:id="note_instance" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox fx:id="note_title" prefHeight="100.0" prefWidth="200.0" />
+                                          <VBox fx:id="note_contents" prefHeight="200.0" prefWidth="100.0" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </HBox>
-                        <VBox fx:id="note_instance" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <HBox fx:id="note_title" prefHeight="100.0" prefWidth="200.0" />
-                              <VBox fx:id="note_contents" prefHeight="200.0" prefWidth="100.0" />
-                           </children>
-                        </VBox>
-                     </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </VBox>
+                     </content>
+                  </ScrollPane>
                </children>
             </HBox>
          </center>
@@ -129,7 +139,10 @@
                         <RadioButton fx:id="radio_ru" mnemonicParsing="false" styleClass="langtoggle" text="Русский" toggleGroup="$lang" />
                      </children>
                   </HBox>
-                  <Label fx:id="colourScheme_title" text="Colour scheme" />
+                  <Label fx:id="colourScheme_title" text="Colour scheme">
+                     <font>
+                        <Font size="24.0" />
+                     </font></Label>
                   <HBox fx:id="colourScheme_options" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="colourScheme_container">
                      <children>
                         <Button id="lightTheme_btn" fx:id="light_mode" mnemonicParsing="false" styleClass="themeButton" text="Light theme">
