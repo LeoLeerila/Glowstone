@@ -1,11 +1,15 @@
 package glowstone.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Note {
     private static int t_id; //remove later
     private int parentId;
     private int id;
     public String title;
     public String content;
+    private List<NoteTag> tags = new ArrayList<>();
 
 
     public Note(String title){
@@ -36,5 +40,19 @@ public class Note {
     }
     public int getId() {
         return id;
+    }
+
+    public void addTag(NoteTag tag) {
+        if (!tags.contains(tag)) {
+            tags.add(tag);
+        }
+    }
+
+    public void removeTag(NoteTag tag) {
+        tags.remove(tag);
+    }
+
+    public List<NoteTag> getTags() {
+        return tags;
     }
 }
