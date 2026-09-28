@@ -114,6 +114,26 @@ public class appControlls {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
     }
+    private void loadFilteredCategories(String filter){
+        ResultSet res = DB.readGroupByTab(currentActiveWorkspace.getId);
+        while(res.next()){
+            if(res.getString("name").contains(filter)){ //later add || to check for tags
+                Category c = new Category();
+                c.setParentId(currentActiveWorkspace.getId);
+                currentActiveWorkspace.addCategoryToShow(c);
+            }
+
+        }
+    }
+
+    private void renderFilteredWorkspace(){
+        noteSpace_view.getChildren().clear();
+        if (currentActiveWorkspace == null) return;
+
+        for(Category category : currentActiveWorkspace.getCategoriesToShow()) {
+            noteSpace_view.getChildren().add(buildCategoryNode(category));
+        }
+    }
 
     public Workspace addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
