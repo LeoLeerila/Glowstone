@@ -335,9 +335,11 @@ public class appControlls {
         HBox noteTitle = new HBox();
         noteTitle.getStyleClass().add("note_title");
         Label noteName = new Label(note.getTitle());
-        Pane pane = new Pane();
-        HBox.setHgrow(pane, Priority.ALWAYS);
-        pane.getChildren().add(noteName);
+        //never using a Pane container ever again -R
+        noteName.setMaxWidth(Double.MAX_VALUE);
+        noteName.setTextOverrun(OverrunStyle.ELLIPSIS);
+        HBox.setHgrow(noteName, Priority.ALWAYS);
+
         Button editNote = new Button("✎");
         Button deleteNote = new Button(langToggle.getString("deleteBtn"));
 
@@ -354,7 +356,7 @@ public class appControlls {
         noteInstance.setMaxWidth(Double.MAX_VALUE);
         theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
         noteContents.getChildren().add(theStuff);
-        noteTitle.getChildren().addAll(pane, editNote, deleteNote);
+        noteTitle.getChildren().addAll(noteName, editNote, deleteNote);
         noteInstance.getChildren().addAll(noteTitle, noteContents);
         return noteInstance;
     }
