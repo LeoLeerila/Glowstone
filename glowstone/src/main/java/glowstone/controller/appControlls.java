@@ -136,7 +136,14 @@ public class appControlls {
 
         search_btn.setOnAction(event -> {
             String text = search_field.getText().trim();
-            loadFilteredCategories(text);
+            if(text.startsWith("#")){
+                text = text.replace("#","");
+                loadFilteredCategories(text, true);
+
+            }else{
+                loadFilteredCategories(text, false);
+            }
+
         });
 
         DB.startConnection();
@@ -214,14 +221,28 @@ public class appControlls {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
     }
-    private void loadFilteredCategories(String filter) {
+    private void loadFilteredCategories(String filter, boolean isTag) {
         currentActiveWorkspace.clearCategoryToShow();
-        for (Category c : currentActiveWorkspace.getCategories()){
-            if(c.getName().contains(filter)){
-                System.out.println(c.getName());
-                currentActiveWorkspace.addCategoryToShow(c);}
+        if(isTag){
+            for (Category c : currentActiveWorkspace.getCategories()){
+                for (CategoryTag tag : c.getTags()) {
+                    if (tag.getName().contains(filter)) {
+                        System.out.println(c.getName());
+                        currentActiveWorkspace.addCategoryToShow(c);
+                    }
+                }
+            }
+        }else {
+            for (Category c : currentActiveWorkspace.getCategories()){
+                if(c.getName().contains(filter)){
+                    System.out.println(c.getName());
+                    currentActiveWorkspace.addCategoryToShow(c);}
+            }
         }
         renderFilteredWorkspace();
+    }
+    private void loadFilteredNote(){
+
     }
 
     private void renderFilteredWorkspace(){
