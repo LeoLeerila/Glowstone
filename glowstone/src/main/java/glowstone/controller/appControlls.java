@@ -241,8 +241,27 @@ public class appControlls {
         }
         renderFilteredWorkspace();
     }
-    private void loadFilteredNote(){
-
+    private void loadFilteredNote(String filter, boolean isTag){
+        currentActiveWorkspace.clearCategoryToShow();
+        for (Category c : currentActiveWorkspace.getCategories()){
+            if(isTag){
+                for (Note n : c.getNotes()) {
+                    for(NoteTag t : n.getTags()){
+                        if(t.getName().contains(filter)){
+                            currentActiveWorkspace.addCategoryToShow(c);
+                            break;
+                        }
+                    }
+                }
+            }else {
+                for (Note n : c.getNotes()) {
+                    if (n.getTitle().contains(filter)) {
+                        currentActiveWorkspace.addCategoryToShow(c);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void renderFilteredWorkspace(){
