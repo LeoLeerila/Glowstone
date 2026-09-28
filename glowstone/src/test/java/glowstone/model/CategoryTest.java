@@ -49,11 +49,13 @@ class CategoryTest {
         assertEquals("Test name1", category1.getName());
         assertEquals("Test name2", category2.getName());
     }
-
+//keeping these ID related tests with the fake IDs in the model test classes for consistency
     @Test
     void testGetId() {
         Category category1 = new Category("Test name1");
         Category category2 = new Category("Test name2");
+        category1.setId(1);
+        category2.setId(2);
 
         assertNotEquals(category1.getId(), category2.getId());
     }
@@ -98,6 +100,8 @@ class CategoryTest {
         Category category = new Category("Test name");
         Note realNote = new Note("Real");
         Note fakeNote = new Note("Fake");
+        realNote.setId(1);
+        fakeNote.setId(2);
 
         category.addNotes(realNote);
         category.removeNotes(fakeNote);
