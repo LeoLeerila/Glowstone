@@ -1,8 +1,5 @@
 package glowstone.controller;
-import glowstone.model.Category;
-import glowstone.model.DB;
-import glowstone.model.Note;
-import glowstone.model.Workspace;
+import glowstone.model.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -136,6 +133,12 @@ public class appControlls {
         m_1.setOnAction(event -> { loadTab(addNewTab());});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
+
+        search_btn.setOnAction(event -> {
+            String text = search_field.getText().trim();
+            loadFilteredCategories(text);
+        });
+
         DB.startConnection();
         loadWorkingArea();
     }
@@ -211,16 +214,14 @@ public class appControlls {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
     }
-    private void loadFilteredCategories(String filter){
-        ResultSet res = DB.readGroupByTab(currentActiveWorkspace.getId);
-        while(res.next()){
-            if(res.getString("name").contains(filter)){ //later add || to check for tags
-                Category c = new Category();
-                c.setParentId(currentActiveWorkspace.getId);
-                currentActiveWorkspace.addCategoryToShow(c);
-            }
-
+    private void loadFilteredCategories(String filter) {
+        currentActiveWorkspace.clearCategoryToShow();
+        for (Category c : currentActiveWorkspace.getCategories()){
+            if(c.getName().contains(filter)){
+                System.out.println(c.getName());
+                currentActiveWorkspace.addCategoryToShow(c);}
         }
+        renderFilteredWorkspace();
     }
 
     private void renderFilteredWorkspace(){
@@ -228,6 +229,7 @@ public class appControlls {
         if (currentActiveWorkspace == null) return;
 
         for(Category category : currentActiveWorkspace.getCategoriesToShow()) {
+            System.out.println(category.getName());
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
     }
@@ -240,7 +242,6 @@ public class appControlls {
         System.out.println("Tab with id: "+workspace.getId()+ ", should be: "+tabId);
         return workspace;
     }
-
     public void loadTab(Workspace workspace){
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");

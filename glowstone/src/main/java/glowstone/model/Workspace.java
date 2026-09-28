@@ -8,7 +8,7 @@ public class Workspace {
     private static int t_id; // remove later
     public String name;
     public List<Category> categories;
-    public List<Category> categoriesToShow = new ArrayList<>();;
+    public List<Category> categoriesToShow = new ArrayList<>();
 
     public Workspace(String name){
         this.name = name;
@@ -42,7 +42,7 @@ public class Workspace {
         return categoriesToShow;
     }
     public void addCategoryToShow(Category g){categoriesToShow.add(g);}
-    public void clearCategoryToShow(){categoriesToShow = new ArrayList<>();}
+    public void clearCategoryToShow(){categoriesToShow.clear();}
 
 
 
