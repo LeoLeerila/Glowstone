@@ -3,8 +3,12 @@ import glowstone.model.Category;
 import glowstone.model.DB;
 import glowstone.model.Note;
 import glowstone.model.Workspace;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -12,16 +16,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import java.util.Locale;
+
 
 public class appControlls {
-    MenuItem m_1 = new MenuItem("Add new workspace tab");
-    MenuItem m_2 = new MenuItem("Add a new category");
+    private final languageToggle langToggle = new languageToggle(Locale.ENGLISH);
+    private final SwitchTheme themeSwitcher = new SwitchTheme();
+    MenuItem m_1;
+    MenuItem m_2;
     @FXML
     private StackPane scene_stackpane;
     @FXML
     private BorderPane main_area;
     @FXML
     private Pane settings_overlay;
+    ToggleGroup tg;
+    @FXML
+    private HBox center_Hbox;
+    @FXML
+    private ScrollPane center_scrollbar;
+    @FXML
+    private ScrollPane left_scrollpane;
+    @FXML
+    private RadioButton radio_en;
+    @FXML
+    private RadioButton radio_fi;
+    @FXML
+    private RadioButton radio_ru;
+    @FXML
+    private Button light_mode;
+    @FXML
+    private Button dark_mode;
+    @FXML
+    private Button blue_mode;
+    @FXML
+    private Button pink_mode;
+    @FXML
+    private Button eyestrain_mode;
     @FXML
     private MenuButton add_btn;
     @FXML
@@ -40,11 +71,24 @@ public class appControlls {
     private Button Add_tab;
     @FXML
     private HBox noteSpace_view;
+    @FXML
+    private Label lang_title;
+    @FXML
+    private Label colourScheme_title;
+    @FXML
+    private Button exit_btn;
 
     private Workspace currentActiveWorkspace;
 
     @FXML
     public void initialize() throws SQLException {
+        tg = new ToggleGroup();
+        left_scrollpane.setFitToWidth(true);
+        center_scrollbar.setFitToWidth(false);
+
+        radio_en.setToggleGroup(tg);
+        radio_fi.setToggleGroup(tg);
+        radio_ru.setToggleGroup(tg);
         main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
         main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
         settings_overlay.setVisible(false);
@@ -57,14 +101,68 @@ public class appControlls {
                 settings_overlay.setVisible(false);
             }
         });
+        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                RadioButton rb = (RadioButton)tg.getSelectedToggle();
+                if(rb == radio_en){
+                    langToggle.setLocale(Locale.ENGLISH);
+                    updateTranslations();
+                    renderWorkspace();
+                } else if (rb == radio_fi){
+                    langToggle.setLocale(languageToggle.FINNISH);
+                    updateTranslations();
+                    renderWorkspace();
+                } else if (rb == radio_ru){
+                    langToggle.setLocale(languageToggle.RUSSIAN);
+                    updateTranslations();
+                    renderWorkspace();
+                } else {
+                    System.out.println("uhhhhhhhhhhhhhhhh no lang?");
+                }
+            }
+        });
+        light_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "light");});
+        blue_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "blue");});
+        dark_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "dark");});
+        pink_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "pink");});
+        eyestrain_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "eyestrain");});
+
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
+        m_1 = new MenuItem(langToggle.getString("addTabBtn"));
+        m_2 = new MenuItem(langToggle.getString("addCategoryBtn"));
         Add_tab.setOnAction(event -> { loadTab(addNewTab());});
         m_1.setOnAction(event -> { loadTab(addNewTab());});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
         DB.startConnection();
         loadWorkingArea();
+    }
+
+    public void updateTranslations(){
+        Platform.runLater(() ->{
+            if(m_1!=null) m_1.setText(langToggle.getString("addTabBtn"));
+            if(m_2!=null) m_2.setText(langToggle.getString("addCategoryBtn"));
+            if(add_btn!=null) add_btn.setText(langToggle.getString("addMenu"));
+            if(Add_tab!=null) Add_tab.setText(langToggle.getString("addTabBtn"));
+            if(lang_title!=null) lang_title.setText(langToggle.getString("langTitle"));
+            if(colourScheme_title!=null) colourScheme_title.setText(langToggle.getString("cso_title"));
+            if(exit_btn!=null) exit_btn.setText(langToggle.getString("exitBtn"));
+            for(Node n : tab_column.getChildren()){
+                if(n instanceof Button){
+                    Button b = (Button) n;
+                    if(b.getGraphic() instanceof MenuButton){
+                        MenuButton mb = (MenuButton) b.getGraphic();
+                        for(MenuItem mi : mb.getItems()){
+                            String id = mi.getId();
+                            if("editTab".equals(id)) mi.setText(langToggle.getString("editBtn"));
+                            else if("deleteTab".equals(id)) mi.setText(langToggle.getString("deleteBtn"));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void loadWorkingArea() throws SQLException {
@@ -100,7 +198,6 @@ public class appControlls {
     public void openTab(Workspace workspace){
         //clear workspace
         //fetch data for the specific tab based on some sort of ID
-        System.out.println("On this tab!");
         currentActiveWorkspace = workspace;
         currentTabName_title.setText(currentActiveWorkspace.getName());
         renderWorkspace();
@@ -137,7 +234,7 @@ public class appControlls {
 
     public Workspace addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
-        Workspace workspace = new Workspace("New Tab");
+        Workspace workspace = new Workspace(langToggle.getString("newTab"));
         int tabId = DB.insertTabToDB(workspace.getName(),0);//thumbnail stuff is missing
         workspace.setId(tabId);
         System.out.println("Tab with id: "+workspace.getId()+ ", should be: "+tabId);
@@ -149,9 +246,11 @@ public class appControlls {
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
         tab_btn.setOnAction(event -> {openTab(workspace);});
-        MenuItem o_1 = new MenuItem("Edit");
-        MenuItem o_2 = new MenuItem("Delete");
+        MenuItem o_1 = new MenuItem(langToggle.getString("editBtn"));
+        MenuItem o_2 = new MenuItem(langToggle.getString("deleteBtn"));
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
+        o_1.setId("editTab");
+        o_2.setId("deleteTab");
         o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
         o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);DB.deleteTabFromDB(workspace.getId());});
         tab_btn.setGraphic(m);
@@ -207,7 +306,7 @@ public class appControlls {
     public void addNewCategory(){
         if (currentActiveWorkspace == null) return;
 
-        Category category = new Category("New category");
+        Category category = new Category(langToggle.getString("newCategory"));
         int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId(),0);
         category.setId(id);
         category.setParentId(currentActiveWorkspace.getId());
@@ -216,8 +315,7 @@ public class appControlls {
         renderWorkspace();
     }
     private void addNoteToCategory(Category category){
-        System.out.println("Happening");
-        Note note = new Note("New Note");
+        Note note = new Note(langToggle.getString("noteTitle"));
         note.setContent("");
         int id = DB.insertNoteToDB(note.content, note.title, category.getId(), 0); //still the thing with the thing which is the thing with... thumbnail..
         note.setId(id);
@@ -231,6 +329,9 @@ public class appControlls {
         HBox categoryTitle = new HBox();
         categoryTitle.getStyleClass().add("category_title");
         Label categoryName = new Label(category.getName());
+        Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.ALWAYS);
+        pane.getChildren().add(categoryName);
         Button addNote = new Button("+");
         Button categoryEdit = new Button("✎");
         Button categoryDelete = new Button(":(");
@@ -241,9 +342,8 @@ public class appControlls {
             DB.deleteGroupFromDB(category.getId());
             renderWorkspace();
         });
-        categoryEdit.getStyleClass().add("editing_btns");
 
-        categoryTitle.getChildren().addAll(categoryName, addNote, categoryEdit, categoryDelete);
+        categoryTitle.getChildren().addAll(pane, addNote, categoryEdit, categoryDelete);
 
         VBox notesContainer = new VBox();
         for(Note note : category.getNotes()){
@@ -255,8 +355,8 @@ public class appControlls {
     public void editCategory(Category category, HBox categoryTitle){
         TextField nameField = new TextField(category.getName());
         nameField.setPrefWidth(160);
-        Button confirm = new Button("Yas");
-        Button cancel = new Button("nvm");
+        Button confirm = new Button("✓");
+        Button cancel = new Button("x");
         confirm.setOnAction(event -> {
             String newName = nameField.getText().trim();
             if(!newName.isEmpty()) {
@@ -302,9 +402,13 @@ public class appControlls {
         noteInstance.getStyleClass().add("note_card");
 
         HBox noteTitle = new HBox();
+        noteTitle.getStyleClass().add("note_title");
         Label noteName = new Label(note.getTitle());
+        Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.ALWAYS);
+        pane.getChildren().add(noteName);
         Button editNote = new Button("✎");
-        Button deleteNote = new Button("Delete");
+        Button deleteNote = new Button(langToggle.getString("deleteBtn"));
 
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
@@ -320,7 +424,7 @@ public class appControlls {
         noteInstance.setMaxWidth(Double.MAX_VALUE);
         theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
         noteContents.getChildren().add(theStuff);
-        noteTitle.getChildren().addAll(noteName, editNote, deleteNote);
+        noteTitle.getChildren().addAll(pane, editNote, deleteNote);
         noteInstance.getChildren().addAll(noteTitle, noteContents);
         return noteInstance;
     }
