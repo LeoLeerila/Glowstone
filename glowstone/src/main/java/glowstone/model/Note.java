@@ -10,6 +10,7 @@ public class Note {
     public String title;
     public String content;
     private List<NoteTag> tags = new ArrayList<>();
+    private Thumbnail thumbnail;
 
 
     public Note(String title){
@@ -54,5 +55,13 @@ public class Note {
 
     public List<NoteTag> getTags() {
         return tags;
+    }
+
+    public Thumbnail getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Thumbnail  thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }
