@@ -2,45 +2,46 @@
 
 ## Sprint Goal
 
-The goal of this sprint 2 is to initiate the technical foundation of Glowstone project by implementing the database using MariaDB,
-starting the user interface
-development with JavaFX, starting backend programmes  and integrating development tools such as unit testing and code coverage reporting.
+The goal for sprint 3 is to connect backend to frontend, improve and extend backend database functions, finish implementing frontend language toggle and search funtions, frontend additional styles and customization.
 
-## Made functional Frontend & backend 
+## Made functional Frontend & backend connection
 
-- Frontend has functional functions (can create/edit/delete tabs/categories/notes)
+- Frontend has connection to backend
 - Backend has all scrum functions
 - Every major part of code has tests
-- JaCoCo
+- Jenkinsfile
+- Dockerfile
 
 ## Demo Summary
-During the sprint review meeting, we presented the database diagram, the database connectivity and implemented unit tests.
+During the sprint review meeting, we presented the application, unit tests, Jenkinsfile, Dockerfile, finished tasks on trello.
 We also showcased the git repository on GitHub.
 
 ## What went well
-- We got working frondend early enough
-- We clearly divided work
-- Database and frontend model tests
+- Jenkinsfile and Dockerfile
+- Localizations
+- Frontend and backend connection
+- DB extended functionality
+- implementation of remaining backlog features
 
 ## What could be improved
-- Database tests
-- More regular meetings
+- git merges
+- unit tests
+- jenkins jacoco plugin
 
 ## Next Sprint Focus
 Next sprint, we will be working on the following
 - Improve unit testing
-- Connect backend with frontend
 - Jenkins integration
-- Continue database implementation
-- Visual improvements to UI
-- Additional feature implementation for UI
+- Bug fixing
+- Push docker image to docker hub
+- Xming support for docker image
 
 
 
 ## A table to demonstrate the time spent by each member during the spring
-| Team Member    | Hours Spent | Assigned tasks                               | In-class tasks |
-|----------------|-------------|----------------------------------------------|----------------|
-| Oleg Dukalskiy | 16          | SCRUMMASTER, Configure Code Coverage Testing | Submitted      |
-| Remi Maskulin  | 23          | Developing the User Interface                | Submitted      |
-| Leo Leerilä    | 21          | Implementing the Database                    | Submitted      |
-| Eeli Mäkinen   | 19.5        | Integrate Unit Testing                       | Submitted      |
+| Team Member    | Hours Spent | Assigned tasks                                                   | In-class tasks |
+|----------------|-------------|------------------------------------------------------------------|----------------|
+| Oleg Dukalskiy | 17          | Frontend connection to backend, Frontend filtering, Localization | Submitted      |
+| Remi Maskulin  | 15.5        | Developing the User Interface, Locatization                      | Submitted      |
+| Leo Leerilä    | 9.5         | SCRUMMASTER, extend the Database, Jenkinsfile, Dockerfile        | Submitted      |
+| Eeli Mäkinen   | 15.5        | Integrate Unit Testing, expanding models                         | Submitted      |
