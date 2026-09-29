@@ -1,5 +1,6 @@
 package glowstone.model;
 
+import java.io.FileInputStream;
 import java.sql.*;
 import java.util.Dictionary;
 import java.util.Enumeration;
