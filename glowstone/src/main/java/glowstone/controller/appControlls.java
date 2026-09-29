@@ -77,6 +77,8 @@ public class appControlls {
 
     private Workspace currentActiveWorkspace;
 
+    private boolean checkNote = false;
+
     @FXML
     public void initialize() throws SQLException {
         tg = new ToggleGroup();
@@ -133,15 +135,23 @@ public class appControlls {
         m_1.setOnAction(event -> { loadTab(addNewTab());});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
-
+        filter_btn.setOnAction(event -> {checkNote = !checkNote;
+            System.out.println(checkNote);});
         search_btn.setOnAction(event -> {
             String text = search_field.getText().trim();
             if(text.startsWith("#")){
                 text = text.replace("#","");
-                loadFilteredCategories(text, true);
-
+                if(checkNote){
+                    loadFilteredNote(text, true);
+                }else {
+                    loadFilteredCategories(text, true);
+                }
             }else{
-                loadFilteredCategories(text, false);
+                if(checkNote){
+                    loadFilteredNote(text, true);
+                }else {
+                    loadFilteredCategories(text, false);
+                }
             }
 
         });
