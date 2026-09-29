@@ -1,9 +1,5 @@
 package glowstone.controller;
-
-import glowstone.model.Category;
-import glowstone.model.Note;
-import glowstone.model.Thumbnail;
-import glowstone.model.Workspace;
+import glowstone.model.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,6 +16,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
 
 import java.util.Locale;
 
@@ -85,8 +85,10 @@ public class appControlls {
 
     private Workspace currentActiveWorkspace;
 
+    private boolean checkNote = false;
+
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         tg = new ToggleGroup();
         left_scrollpane.setFitToWidth(true);
         center_scrollbar.setFitToWidth(false);
@@ -135,12 +137,34 @@ public class appControlls {
 
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
-        Add_tab.setOnAction(event -> { addNewTab();});
         m_1 = new MenuItem(langToggle.getString("addTabBtn"));
         m_2 = new MenuItem(langToggle.getString("addCategoryBtn"));
-        m_1.setOnAction(event -> { addNewTab();});
+        Add_tab.setOnAction(event -> { loadTab(addNewTab());});
+        m_1.setOnAction(event -> { loadTab(addNewTab());});
         m_2.setOnAction(event -> { addNewCategory();});
         add_btn.getItems().addAll(m_1, m_2);
+        filter_btn.setOnAction(event -> {checkNote = !checkNote;
+            System.out.println(checkNote);});
+        search_btn.setOnAction(event -> {
+            String text = search_field.getText().trim();
+            if(text.startsWith("#")){
+                text = text.replace("#","");
+                if(checkNote){
+                    loadFilteredNote(text, true);
+                }else {
+                    loadFilteredCategories(text, true);
+                }
+            }else{
+                if(checkNote){
+                    loadFilteredNote(text, true);
+                }else {
+                    loadFilteredCategories(text, false);
+                }
+            }
+
+        });
+
+        DB.startConnection();
         loadWorkingArea();
     }
 
@@ -169,12 +193,35 @@ public class appControlls {
         });
     }
 
-    public void loadWorkingArea(){
+    public void loadWorkingArea() throws SQLException {
         noteSpace_view.getChildren().clear();
         tab_column.getChildren().clear();
 
-        //replace later with code to get stuff from the DB
-        addNewTab();
+        //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
+        ResultSet tabs = DB.readWholeTableFromDB("NOTE_TAB");
+        while(tabs.next()){
+            Workspace tab = new Workspace(tabs.getString("name"));
+            tab.setId(tabs.getInt("id"));
+            ResultSet groups = DB.readGroupByTab(tab.getId());
+            while(groups.next()){
+                Category category = new Category(groups.getString("name"));
+                category.setId(groups.getInt("id"));
+                tab.createCategory(category);
+                ResultSet notes = DB.readNoteByGroup(category.getId());
+                while(notes.next()){
+                    Note note = new Note(notes.getString("name"));
+                    note.setId(notes.getInt("id"));
+                    note.setContent(notes.getString("content"));
+                    category.addNotes(note);
+                    System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+                }
+                System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
+            }
+            loadTab(tab);
+            System.out.println("Loaded tab with: "+tab.getId());
+        }
+        //if(tab_column.getChildren().isEmpty()){loadTab(addNewTab());} //idk if needed
+
     }
     public void openTab(Workspace workspace){
         //clear workspace
@@ -192,10 +239,69 @@ public class appControlls {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
     }
+    private void loadFilteredCategories(String filter, boolean isTag) {
+        currentActiveWorkspace.clearCategoryToShow();
+        if(isTag){
+            for (Category c : currentActiveWorkspace.getCategories()){
+                for (CategoryTag tag : c.getTags()) {
+                    if (tag.getName().contains(filter)) {
+                        System.out.println(c.getName());
+                        currentActiveWorkspace.addCategoryToShow(c);
+                    }
+                }
+            }
+        }else {
+            for (Category c : currentActiveWorkspace.getCategories()){
+                if(c.getName().contains(filter)){
+                    System.out.println(c.getName());
+                    currentActiveWorkspace.addCategoryToShow(c);}
+            }
+        }
+        renderFilteredWorkspace();
+    }
+    private void loadFilteredNote(String filter, boolean isTag){
+        currentActiveWorkspace.clearCategoryToShow();
+        for (Category c : currentActiveWorkspace.getCategories()){
+            if(isTag){
+                for (Note n : c.getNotes()) {
+                    for(NoteTag t : n.getTags()){
+                        if(t.getName().contains(filter)){
+                            currentActiveWorkspace.addCategoryToShow(c);
+                            break;
+                        }
+                    }
+                }
+            }else {
+                for (Note n : c.getNotes()) {
+                    if (n.getTitle().contains(filter)) {
+                        currentActiveWorkspace.addCategoryToShow(c);
+                        break;
+                    }
+                }
+            }
+        }
+        renderFilteredWorkspace();
+    }
 
-    public void addNewTab(){
+    private void renderFilteredWorkspace(){
+        noteSpace_view.getChildren().clear();
+        if (currentActiveWorkspace == null) return;
+
+        for(Category category : currentActiveWorkspace.getCategoriesToShow()) {
+            System.out.println(category.getName());
+            noteSpace_view.getChildren().add(buildCategoryNode(category));
+        }
+    }
+
+    public Workspace addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
         Workspace workspace = new Workspace(langToggle.getString("newTab"));
+        int tabId = DB.insertTabToDB(workspace.getName(),0);//thumbnail stuff is missing
+        workspace.setId(tabId);
+        System.out.println("Tab with id: "+workspace.getId()+ ", should be: "+tabId);
+        return workspace;
+    }
+    public void loadTab(Workspace workspace){
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
@@ -206,12 +312,14 @@ public class appControlls {
         o_1.setId("editTab");
         o_2.setId("deleteTab");
         o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
-        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);});
+        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);DB.deleteTabFromDB(workspace.getId());});
         tab_btn.setGraphic(m);
         tab_column.getChildren().add(tab_btn);
         tab_column.setFillWidth(true);
         openTab(workspace);
     }
+
+
     private void editTab(Workspace workspace, Button tabbtn, MenuButton m){
         HBox container = new HBox(5);
         TextField nameField = new TextField(workspace.getName());
@@ -233,6 +341,7 @@ public class appControlls {
             if(!newName.isEmpty()){
                 workspace.setName(newName);
                 tabbtn.setText(newName);
+                DB.updateTabInDB(workspace.getId(),workspace.getName(),0);//thumbnail stuff is missing
                 if (currentActiveWorkspace == workspace){
                     currentTabName_title.setText(newName);
                 }
@@ -258,13 +367,20 @@ public class appControlls {
         if (currentActiveWorkspace == null) return;
 
         Category category = new Category(langToggle.getString("newCategory"));
+        int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId(),0);
+        category.setId(id);
+        category.setParentId(currentActiveWorkspace.getId());
+        System.out.println("Category Id with TabID: "+category.getId()+" / "+category.getParentId()+", C.Id should be: "+id);
         currentActiveWorkspace.createCategory(category);
         renderWorkspace();
     }
     private void addNoteToCategory(Category category){
         Note note = new Note(langToggle.getString("noteTitle"));
         note.setContent("");
+        int id = DB.insertNoteToDB(note.content, note.title, category.getId(), 0); //still the thing with the thing which is the thing with... thumbnail..
+        note.setId(id);
         category.addNotes(note);
+        System.out.println("Added Note with: "+note.getId()+" with category: "+note.getParentId());
         renderWorkspace();
     }
     private VBox buildCategoryNode(Category category){
@@ -283,6 +399,7 @@ public class appControlls {
         categoryEdit.setOnAction(event -> { editCategory(category, categoryTitle);});
         categoryDelete.setOnAction(event -> {
             currentActiveWorkspace.removeCategory(category);
+            DB.deleteGroupFromDB(category.getId());
             renderWorkspace();
         });
 
@@ -304,6 +421,7 @@ public class appControlls {
             String newName = nameField.getText().trim();
             if(!newName.isEmpty()) {
                 category.setName(newName);
+                DB.updateGroupInDB(category.getId(), category.getName(), currentActiveWorkspace.getId(),0); // yay thumbnail :D
             }
             renderWorkspace();
         });
@@ -326,6 +444,7 @@ public class appControlls {
         confirm.setOnAction(event -> {
             note.setTitle(titleField.getText().trim());
             note.setContent(contentField.getText());
+            DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),0); //thumbnail thingy
             renderWorkspace();
         });
         cancel.setOnAction(event -> {
@@ -372,6 +491,7 @@ public class appControlls {
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
             category.removeNotes(note);
+            DB.deleteNoteFromDB(note.getId());
             renderWorkspace();
         });
 

@@ -8,11 +8,11 @@ public class Workspace {
     private static int t_id; // remove later
     public String name;
     public List<Category> categories;
+    public List<Category> categoriesToShow = new ArrayList<>();
 
     public Workspace(String name){
         this.name = name;
-        this.id = t_id ++; // this should later take id from created db table
-        categories = new ArrayList<Category>();
+        categories = new ArrayList<>();
     }
 
     public void createCategory(Category category){
@@ -32,9 +32,22 @@ public class Workspace {
     public String getName(){
         return name;
     }
+
+    public void setId(int id) {this.id = id;}
     public int getId(){
         return id;
     }
+
+    public List<Category> getCategoriesToShow(){
+        return categoriesToShow;
+    }
+    public void addCategoryToShow(Category g){categoriesToShow.add(g);}
+    public void clearCategoryToShow(){categoriesToShow.clear();}
+
+
+
+
+
 //    public void addCategoryToTab(Category category){
 //        for (Category c : categories) {
 //            if (!(c.getId() == category.getId())) {

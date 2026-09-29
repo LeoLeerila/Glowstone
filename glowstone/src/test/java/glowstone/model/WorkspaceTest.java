@@ -44,6 +44,9 @@ class WorkspaceTest {
     void testGetId() {
         Workspace workspace1 = new Workspace("Test name1");
         Workspace workspace2 = new Workspace("Test name2");
+        workspace1.setId(1);
+        workspace2.setId(2);
+
 
         assertNotEquals(workspace1.getId(), workspace2.getId());
     }
@@ -86,8 +89,11 @@ class WorkspaceTest {
         Category realCategory = new Category("Real");
         Category fakeCategory = new Category("Fake");
 
+        realCategory.setId(1);
+        fakeCategory.setId(2);
         workspace.createCategory(realCategory);
         workspace.removeCategory(fakeCategory);
+        
 
         assertEquals(1, workspace.getCategories().size());
         assertEquals(realCategory, workspace.getCategories().get(0));
