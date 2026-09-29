@@ -7,7 +7,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
+import javafx.scene.image.ImageView;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -451,16 +459,34 @@ public class appControlls {
     }
     private VBox buildNoteNode(Category category, Note note){
         VBox noteInstance = new VBox();
+        ImageView thumbnailView = new ImageView();
         noteInstance.getStyleClass().add("note_card");
+
+        Thumbnail thumbnail = note.getThumbnail();
+        if (thumbnail != null) {
+            Image image = new Image(
+                    new ByteArrayInputStream(thumbnail.getData())
+            );
+            thumbnailView.setImage(image);
+            thumbnailView.setFitWidth(200);
+            thumbnailView.setFitHeight(200);
+            thumbnailView.setPreserveRatio(true);
+            thumbnailView.setSmooth(true);
+        }
+        
 
         HBox noteTitle = new HBox();
         noteTitle.getStyleClass().add("note_title");
         Label noteName = new Label(note.getTitle());
-        Pane pane = new Pane();
-        HBox.setHgrow(pane, Priority.ALWAYS);
-        pane.getChildren().add(noteName);
+        //never using a Pane container ever again -R
+        noteName.setMaxWidth(Double.MAX_VALUE);
+        noteName.setTextOverrun(OverrunStyle.ELLIPSIS);
+        HBox.setHgrow(noteName, Priority.ALWAYS);
+
         Button editNote = new Button("✎");
         Button deleteNote = new Button(langToggle.getString("deleteBtn"));
+        Button thumbnailButton = new Button("Image");
+        thumbnailButton.setOnAction(event -> chooseThumbnail(note));
 
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
@@ -475,9 +501,50 @@ public class appControlls {
         theStuff.setWrapText(true);
         noteInstance.setMaxWidth(Double.MAX_VALUE);
         theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
-        noteContents.getChildren().add(theStuff);
-        noteTitle.getChildren().addAll(pane, editNote, deleteNote);
+        noteContents.getChildren().addAll(thumbnailView, theStuff);
+        noteTitle.getChildren().addAll(noteName, thumbnailButton, editNote, deleteNote);
         noteInstance.getChildren().addAll(noteTitle, noteContents);
         return noteInstance;
+    }
+
+    private void chooseThumbnail(Note note) {
+        FileChooser chooser = new FileChooser();
+        
+        FileChooser.ExtensionFilter extFilterJPG
+                = new FileChooser.ExtensionFilter("JPG files (*.JPG)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterjpg
+                = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter extFilterPNG
+                = new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG");
+        FileChooser.ExtensionFilter extFilterpng
+                = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
+        chooser.getExtensionFilters()
+                .addAll(extFilterJPG, extFilterjpg, extFilterPNG, extFilterpng);
+
+        File selectedFile = chooser.showOpenDialog(noteSpace_view.getScene().getWindow());
+
+        if (selectedFile == null) {
+            return;
+        }
+
+        try {
+        byte[] imageData = Files.readAllBytes(selectedFile.toPath());
+        System.out.println("Selected: " + selectedFile);
+        System.out.println("Bytes: " + imageData.length);
+
+        Thumbnail thumbnail = new Thumbnail(0, imageData);
+        note.setThumbnail(thumbnail);
+
+        System.out.println(
+            "Stored bytes: " + note.getThumbnail().getData().length
+            );
+
+        renderWorkspace();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        
     }
 }
