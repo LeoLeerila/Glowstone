@@ -172,4 +172,27 @@ class DBTest {
             assertEquals(group1Id, rs.getInt("id"));
         }
     }
+
+    @Test 
+    void insertsReturnDatabaseGeneratedIds() {
+        int groupId = DB.insertGroupToDB("test group", tab1Id, 0);
+
+        try {
+            assertTrue(groupId > 0);
+
+            int noteId = DB.insertNoteToDB(
+                "test content",
+                "test note",
+                groupId,
+                0
+            );
+
+            assertTrue(noteId > 0);
+            assertNotEquals(0, noteId);
+            assertNotEquals(0, groupId);
+        } finally {
+            DB.deleteGroupFromDB(groupId);
+        }
+    }
 }
+
