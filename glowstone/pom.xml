@@ -80,7 +80,7 @@
                         <!-- Specify the main class (required for execution) -->
                         <transformers>
                             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <mainClass>com.example.App</mainClass> <!-- Replace with your main class -->
+                                <mainClass>glowstone.main.Main</mainClass> <!-- Replace with your main class -->
                             </transformer>
                             <!-- Optional: Merge service files (e.g., for SPI implementations) -->
                             <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
