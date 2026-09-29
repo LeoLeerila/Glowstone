@@ -37,6 +37,8 @@ class NoteTest {
     void testGetId() {
         Note note1 = new Note("Note 1");
         Note note2 = new Note("Note 2");
+        note1.setId(1);
+        note2.setId(2);
 
         assertNotEquals(note1.getId(), note2.getId()); //TEMP should take id from db
     }
