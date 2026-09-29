@@ -230,7 +230,6 @@ public class appControlls {
         for(Category category : currentActiveWorkspace.getCategories()) {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
         }
-        renderFilteredWorkspace();
     }
     private void loadFilteredCategories(String filter, boolean isTag) {
         currentActiveWorkspace.clearCategoryToShow();
@@ -273,6 +272,7 @@ public class appControlls {
                 }
             }
         }
+        renderFilteredWorkspace();
     }
 
     private void renderFilteredWorkspace(){
