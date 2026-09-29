@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                    url: 'https://github.com/LeoLeerila/Glowstone.git'
+            }
+        }
+        
+        stage('Build') {
+             
+            steps {
+                sh 'mvn -f glowstone/pom.xml install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn -f glowstone/pom.xml test'
+            }
+        }
+        stage('Code Coverage') {
+            steps {
+                sh 'mvn -f glowstone/pom.xml jacoco:report'
+            }
+        }
+        stage('Publish Test Results') {
+            steps {
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+        stage('Publish Coverage Report') {
+            steps {
+                jacoco()
+            }
+        }
+    }
+}

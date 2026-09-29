@@ -1,4 +1,5 @@
-package glowstone;
+package glowstone.main;
+import glowstone.view.AppView;
 
 import java.sql.ResultSet;
 
@@ -7,7 +8,8 @@ import glowstone.model.DB;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
-        try {
+        AppView.launch(AppView.class);
+        /*try {
             DB.startConnection();
 
             DB.insertTabToDB("java created tab", 0);
@@ -75,7 +77,7 @@ public class Main {
             while (rs.next()) {
                 System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
             }
-            
+
             rs = DB.readFromDB("NOTE", 2);
             while (rs.next()) {
                 System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
@@ -104,7 +106,7 @@ public class Main {
             while (rs.next()) {
                 System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
             }
-            
+
             rs = DB.readFromDB("NOTE", 2);
             while (rs.next()) {
                 System.out.println("id " + rs.getInt("id") + ", name " + rs.getString("name"));
@@ -113,6 +115,6 @@ public class Main {
             DB.endConnection();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
