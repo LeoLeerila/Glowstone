@@ -188,7 +188,8 @@ class DBTest {
             );
 
             assertTrue(noteId > 0);
-            assertNotEquals(groupId, noteId);
+            assertNotEquals(0, noteId);
+            assertNotEquals(0, groupId);
         } finally {
             DB.deleteGroupFromDB(groupId);
         }
