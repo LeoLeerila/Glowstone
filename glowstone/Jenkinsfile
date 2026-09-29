@@ -20,13 +20,13 @@ pipeline {
         }
         stage ('build'){
             steps{
-                sh 'mvn clean install'
+                sh 'mvn clean install -f "./glowstone/"'
             }
         }
 
         stage('test') {
             steps{
-                sh 'mvn test'
+                sh 'mvn test -f "./glowstone/"'
             }
         }
         stage('jacoco'){
