@@ -148,7 +148,7 @@ public class appControlls {
                 }
             }else{
                 if(checkNote){
-                    loadFilteredNote(text, true);
+                    loadFilteredNote(text, false);
                 }else {
                     loadFilteredCategories(text, false);
                 }
