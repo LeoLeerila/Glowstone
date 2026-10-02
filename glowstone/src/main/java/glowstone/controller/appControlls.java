@@ -164,7 +164,7 @@ public class appControlls {
 
         });
 
-        DB.startConnection();
+        DB.startConnection("glowstone");
         loadWorkingArea();
     }
 

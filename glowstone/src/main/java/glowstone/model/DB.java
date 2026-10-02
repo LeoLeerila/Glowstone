@@ -2,14 +2,12 @@ package glowstone.model;
 
 import java.io.FileInputStream;
 import java.sql.*;
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 public class DB {
     private static Connection db = null;
 
-    public static void startConnection() throws SQLException {
-        db = DBConnector.getInstance();
+    public static void startConnection(String dbStrign) throws SQLException {
+        db = DBConnector.getInstance(dbStrign);
     }
 
     public static void endConnection() throws SQLException {

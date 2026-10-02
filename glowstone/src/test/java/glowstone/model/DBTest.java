@@ -16,7 +16,7 @@ class DBTest {
 
     @BeforeAll
     static void startConn() throws SQLException {
-        DB.startConnection();
+        DB.startConnection("glowstone_test");
         DB.insertTabToDB("TAB1",0);
         DB.insertTabToDB("TAB2",0);
         ResultSet rs = DB.readWholeTableFromDB("NOTE_TAB");
