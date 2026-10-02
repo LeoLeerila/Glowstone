@@ -199,26 +199,28 @@ public class appControlls {
 
         //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
         ResultSet tabs = DB.readWholeTableFromDB("NOTE_TAB");
-        while(tabs.next()){
-            Workspace tab = new Workspace(tabs.getString("name"));
-            tab.setId(tabs.getInt("id"));
-            ResultSet groups = DB.readGroupByTab(tab.getId());
-            while(groups.next()){
-                Category category = new Category(groups.getString("name"));
-                category.setId(groups.getInt("id"));
-                tab.createCategory(category);
-                ResultSet notes = DB.readNoteByGroup(category.getId());
-                while(notes.next()){
-                    Note note = new Note(notes.getString("name"));
-                    note.setId(notes.getInt("id"));
-                    note.setContent(notes.getString("content"));
-                    category.addNotes(note);
-                    System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+        if(!(tabs ==null)){
+            while(tabs.next()){
+                Workspace tab = new Workspace(tabs.getString("name"));
+                tab.setId(tabs.getInt("id"));
+                ResultSet groups = DB.readGroupByTab(tab.getId());
+                while(groups.next()){
+                    Category category = new Category(groups.getString("name"));
+                    category.setId(groups.getInt("id"));
+                    tab.createCategory(category);
+                    ResultSet notes = DB.readNoteByGroup(category.getId());
+                    while(notes.next()){
+                        Note note = new Note(notes.getString("name"));
+                        note.setId(notes.getInt("id"));
+                        note.setContent(notes.getString("content"));
+                        category.addNotes(note);
+                        System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+                    }
+                    System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
                 }
-                System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
+                loadTab(tab);
+                System.out.println("Loaded tab with: "+tab.getId());
             }
-            loadTab(tab);
-            System.out.println("Loaded tab with: "+tab.getId());
         }
         //if(tab_column.getChildren().isEmpty()){loadTab(addNewTab());} //idk if needed
 

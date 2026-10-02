@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnector {
     private static Connection conn = null;
-    private static String connectionUrl = "jdbc:mariadb://localhost:3306/glowstone_test";
+    private static String connectionUrl = "jdbc:mariadb://localhost:3307/glowstone_test";
     private static String connectionUser = "root";
     private static String connectionPassword = "example";
 
