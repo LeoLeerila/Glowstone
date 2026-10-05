@@ -106,6 +106,13 @@ public class DB {
             statement.setInt(3, group_id);
             statement.setObject(4, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Note creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE");
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,6 +128,13 @@ public class DB {
             statement.setInt(2, tab_id);
             statement.setObject(3, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Group creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_GROUP");
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,6 +149,13 @@ public class DB {
             statement.setString(1, name);
             statement.setObject(2, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Tab creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_TAB");
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,6 +169,13 @@ public class DB {
             PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
             statement.setBlob(1, blobData);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Thumbnail creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into THUMBNAIL");
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,6 +190,13 @@ public class DB {
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Note Category creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_CATEGORY");
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,6 +211,13 @@ public class DB {
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Group Category creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_GROUP_CATEGORY");
         } catch (Exception e) {
             e.printStackTrace();
