@@ -100,7 +100,7 @@ public class DB {
     public static int insertNoteToDB(String content, String name, int group_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
@@ -116,7 +116,7 @@ public class DB {
     public static int insertGroupToDB(String name, int tab_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setInt(2, tab_id);
             statement.setObject(3, null, Types.INTEGER);
@@ -131,7 +131,7 @@ public class DB {
     public static int insertTabToDB(String name){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setObject(2, null, Types.INTEGER);
             result = statement.executeUpdate();
@@ -145,7 +145,7 @@ public class DB {
     public static int insertThumbnailToDB(FileInputStream blobData){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
             statement.setBlob(1, blobData);
             result = statement.executeUpdate();
             System.out.println("inserted into THUMBNAIL");
@@ -158,7 +158,7 @@ public class DB {
     public static int insertNoteCategoryToDB(String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_CATEGORY` (`name`, `color`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_CATEGORY` (`name`, `color`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
@@ -172,7 +172,7 @@ public class DB {
     public static int insertNoteGroupCategoryToDB(String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP_CATEGORY` (`name`, `color`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP_CATEGORY` (`name`, `color`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
