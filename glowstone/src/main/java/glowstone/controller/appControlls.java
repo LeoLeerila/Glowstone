@@ -223,7 +223,7 @@ public class appControlls {
                         note.setId(notes.getInt("id"));
                         ResultSet noteTags = DB.readNoteHas(category.getId());
                         while(noteTags.next()){
-                            ResultSet frTags = DB.readNoteCategory(groupTags.getInt("note_category_id"));
+                            ResultSet frTags = DB.readNoteCategory(noteTags.getInt("note_category_id"));
                             while(frTags.next()){
                                 note.addTag(new NoteTag(frTags.getInt("id"), frTags.getString("name"), frTags.getString("color")));
                             }
