@@ -1,5 +1,7 @@
 package glowstone.model;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,4 +143,41 @@ class CategoryTest {
 
         assertEquals(10, category.getParentId());
     }
+
+    @Test
+    void addTagAddsTag() {
+        Category category = new Category("Test name");
+        CategoryTag tag = new CategoryTag(1, "test tag", "#00ff00");
+
+        category.addTag(tag);
+
+        assertEquals(1, category.getTags().size());
+        assertEquals(tag, category.getTags().get(0));
+    }
+
+    @Test
+    void getTagsReturnsTags() {
+        Category category = new Category("Test name");
+        CategoryTag tag1 = new CategoryTag(1, "Test tag1", "#00ff00");
+        CategoryTag tag2 = new CategoryTag(2, "Test tag2", "#ff0000");
+
+        category.addTag(tag1);
+        category.addTag(tag2);
+
+        assertEquals(List.of(tag1, tag2), category.getTags());
+    }
+
+    @Test
+    void removeTagRemovesTag() {
+        Category category = new Category("Test name");
+        CategoryTag tag1 = new CategoryTag(1, "Test tag1", "#00ff00");
+        CategoryTag tag2 = new CategoryTag(2, "Test tag2", "#ff0000");
+        category.addTag(tag1);
+        category.addTag(tag2);
+
+        category.removeTag(tag1);
+
+        assertEquals(List.of(tag2), category.getTags());
+    }
+
 }

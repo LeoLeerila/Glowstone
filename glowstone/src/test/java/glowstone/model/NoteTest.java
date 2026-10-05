@@ -1,5 +1,7 @@
 package glowstone.model;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -97,5 +99,41 @@ class NoteTest {
         Note note = new Note("Test title");
 
         assertNull(note.getContent());
+    }
+
+    @Test
+    void addTagAddsTag() {
+        Note note = new Note("Test title");
+        NoteTag tag = new NoteTag(1, "test tag", "#00ff00");
+
+        note.addTag(tag);
+
+        assertEquals(1, note.getTags().size());
+        assertEquals(tag, note.getTags().get(0));
+    }
+
+    @Test
+    void getTagsReturnsTags() {
+        Note note = new Note("Test title");
+        NoteTag tag1 = new NoteTag(1, "Test tag1", "#00ff00");
+        NoteTag tag2 = new NoteTag(2, "Test tag2", "#ff0000");
+
+        note.addTag(tag1);
+        note.addTag(tag2);
+
+        assertEquals(List.of(tag1, tag2), note.getTags());
+    }
+
+    @Test
+    void removeTagRemovesTag() {
+        Note note = new Note("Test title");
+        NoteTag tag1 = new NoteTag(1, "Test tag1", "#00ff00");
+        NoteTag tag2 = new NoteTag(2, "Test tag2", "#ff0000");
+        note.addTag(tag1);
+        note.addTag(tag2);
+
+        note.removeTag(tag1);
+
+        assertEquals(List.of(tag2), note.getTags());
     }
 }
