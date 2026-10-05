@@ -415,17 +415,7 @@ public class appControlls {
     //Add colour plsssssssssssssssssss
     private void addTagToCategory(Category category, String txt, String colour) throws SQLException {
         CategoryTag tag = new CategoryTag(-0 , txt, colour);
-        int tagId = tag.getId();
-        ResultSet dbtags = DB.readNoteGroupCategory();
-        while (dbtags.next()){
-            if(dbtags.getString("name").equals(txt)){
-                tagId = dbtags.getInt("id");
-                break;
-            }
-        }
-        if (tag.getId() == -0){
-            tagId = DB.insertNoteGroupCategoryToDB(tag.getName(), tag.getColor());
-        }
+        int tagId = DB.insertNoteGroupCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertGroupHasToDB(category.getId(), tag.getId());
         category.addTag(tag);
@@ -433,18 +423,7 @@ public class appControlls {
     //Add colour plsssssssssssssssssss
     private void addTagToNote(Note note, String txt, String colour) throws SQLException {
         NoteTag tag = new NoteTag(-0 , txt, colour);
-        int tagId = tag.getId();
-        ResultSet dbtags = DB.readNoteCategory();
-        while (dbtags.next()){
-            if(dbtags.getString("name").equals(txt)){
-                tagId = dbtags.getInt("id");
-                break;
-            }
-        }
-
-        if (tag.getId() == -0){
-            tagId = DB.insertNoteCategoryToDB(tag.getName(), tag.getColor());
-        }
+        int tagId = DB.insertNoteCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertNoteHasToDB(note.getId(), tag.getId());
         note.addTag(tag);
