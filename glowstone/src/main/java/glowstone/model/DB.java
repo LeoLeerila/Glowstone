@@ -557,7 +557,7 @@ public class DB {
     public static int updateNoteCategoryInDB(int noteCategoryId, String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `THUMBNAIL` SET name=?, color=? WHERE id=" + noteCategoryId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_CATEGORY` SET name=?, color=? WHERE id=" + noteCategoryId);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
@@ -571,7 +571,7 @@ public class DB {
     public static int updateNoteGroupCategoryInDB(int groupCategoryId, String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `THUMBNAIL` SET name=?, color=? WHERE id=" + groupCategoryId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_GROUP_CATEGORY` SET name=?, color=? WHERE id=" + groupCategoryId);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
