@@ -12,14 +12,16 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.image.ImageView;
 
+import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import java.util.Locale;
 
@@ -207,11 +209,35 @@ public class appControlls {
                 while(groups.next()){
                     Category category = new Category(groups.getString("name"));
                     category.setId(groups.getInt("id"));
+                    ResultSet groupTags = DB.readGroupHas(category.getId());
+                    while(groupTags.next()){
+                        ResultSet frTags = DB.readNoteGroupCategory(groupTags.getInt("group_category_id"));
+                        while(frTags.next()) {
+                            category.addTag(new CategoryTag(frTags.getInt("id"), frTags.getString("name"), frTags.getString("color")));
+                        }
+                    }
                     tab.createCategory(category);
                     ResultSet notes = DB.readNoteByGroup(category.getId());
                     while(notes.next()){
                         Note note = new Note(notes.getString("name"));
                         note.setId(notes.getInt("id"));
+                        ResultSet noteTags = DB.readNoteHas(category.getId());
+                        while(noteTags.next()){
+                            ResultSet frTags = DB.readNoteCategory(groupTags.getInt("note_category_id"));
+                            while(frTags.next()){
+                                note.addTag(new NoteTag(frTags.getInt("id"), frTags.getString("name"), frTags.getString("color")));
+                            }
+                        }
+                        if(notes.getObject("thumbnail_id") != null) {
+                            ResultSet imageInDB = DB.readThumbnail(notes.getInt("thumbnail_id"));
+                            while (imageInDB.next()) {
+                                Blob blob = imageInDB.getBlob("thumbnail");
+                                int blobLength = (int) blob.length();
+                                byte[] imageBlob = blob.getBytes(1, blobLength);
+                                note.setThumbnail(new Thumbnail(imageInDB.getInt("id"), imageBlob));
+                                blob.free();
+                            }
+                        }
                         note.setContent(notes.getString("content"));
                         category.addNotes(note);
                         System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
@@ -228,6 +254,7 @@ public class appControlls {
     public void openTab(Workspace workspace){
         //clear workspace
         //fetch data for the specific tab based on some sort of ID
+        //no
         currentActiveWorkspace = workspace;
         currentTabName_title.setText(currentActiveWorkspace.getName());
         renderWorkspace();
@@ -385,6 +412,56 @@ public class appControlls {
         System.out.println("Added Note with: "+note.getId()+" with category: "+note.getParentId());
         renderWorkspace();
     }
+    //Add colour plsssssssssssssssssss
+    private void addTagToCategory(Category category, String txt, String colour) throws SQLException {
+        CategoryTag tag = new CategoryTag(-0 , txt, colour);
+        int tagId = tag.getId();
+        ResultSet dbtags = DB.readNoteGroupCategory();
+        while (dbtags.next()){
+            if(dbtags.getString("name").equals(txt)){
+                tagId = dbtags.getInt("id");
+                break;
+            }
+        }
+        if (tag.getId() == -0){
+            tagId = DB.insertNoteGroupCategoryToDB(tag.getName(), tag.getColor());
+        }
+        tag.setId(tagId);
+        DB.insertGroupHasToDB(category.getId(), tag.getId());
+        category.addTag(tag);
+    }
+    //Add colour plsssssssssssssssssss
+    private void addTagToNote(Note note, String txt, String colour) throws SQLException {
+        NoteTag tag = new NoteTag(-0 , txt, colour);
+        int tagId = tag.getId();
+        ResultSet dbtags = DB.readNoteCategory();
+        while (dbtags.next()){
+            if(dbtags.getString("name").equals(txt)){
+                tagId = dbtags.getInt("id");
+                break;
+            }
+        }
+
+        if (tag.getId() == -0){
+            tagId = DB.insertNoteCategoryToDB(tag.getName(), tag.getColor());
+        }
+        tag.setId(tagId);
+        DB.insertNoteHasToDB(note.getId(), tag.getId());
+        note.addTag(tag);
+
+    }
+    private void deleteTagNote(NoteTag tag, Note note){
+        note.removeTag(tag);
+        DB.deleteNoteHasFromDB(note.getId(), tag.getId());
+        DB.deleteUnusedNoteCategoryFromDB();
+    }
+    private void deleteTagCategory(CategoryTag tag, Category category){
+        category.removeTag(tag);
+        DB.deleteGroupHasFromDB(category.getId(), tag.getId());
+        DB.deleteUnusedNoteGroupCategoryFromDB();
+    }
+
+
     private VBox buildCategoryNode(Category category){
         VBox categoryColumn = new VBox();
         categoryColumn.getStyleClass().add("category_view");
@@ -409,6 +486,37 @@ public class appControlls {
         tagRow.setFillWidth(true);
         HBox.setHgrow(tagRow, Priority.ALWAYS);
         tagContainer.getChildren().addAll(tagRow, addTag);
+
+        for(CategoryTag tag : category.getTags()){
+            Label tagText = new Label(tag.getName());
+            Button delete = new Button("x");
+            delete.setOnAction(event -> {
+                deleteTagCategory(tag, category);
+                renderWorkspace();
+            });
+            tagRow.getChildren().addAll(tagText, delete);
+        }
+
+        addTag.setOnAction(event -> {
+            TextField nameField = new TextField();
+            nameField.setPrefWidth(160);
+            Button confirm = new Button("✓");
+            Button cancel = new Button("x");
+            confirm.setOnAction(ActionEvent -> {
+                String newName = nameField.getText().trim();
+                try {
+                    addTagToCategory(category, newName, ""); // add colour later
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                renderWorkspace();
+            });
+            cancel.setOnAction(ActionEvent -> {
+                renderWorkspace();
+            });
+            tagContainer.getChildren().clear();
+            tagContainer.getChildren().addAll(nameField, confirm, cancel);
+        });
 
         addNote.setOnAction(event -> {addNoteToCategory(category);});
         categoryEdit.setOnAction(event -> { editCategory(category, categoryTitle);});
@@ -459,7 +567,7 @@ public class appControlls {
         confirm.setOnAction(event -> {
             note.setTitle(titleField.getText().trim());
             note.setContent(contentField.getText());
-            DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),0); //thumbnail thingy
+            DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
             renderWorkspace();
         });
         cancel.setOnAction(event -> {
@@ -510,6 +618,39 @@ public class appControlls {
         HBox.setHgrow(tagRow, Priority.ALWAYS);
         tagContainer.getChildren().addAll(tagRow, addTag);
 
+        for(NoteTag tag : note.getTags()){
+            Label tagText = new Label(tag.getName());
+            Button delete = new Button("x");
+            delete.setOnAction(event -> {
+                deleteTagNote(tag, note);
+                renderWorkspace();
+            });
+            tagRow.getChildren().addAll(tagText, delete);
+        }
+
+        addTag.setOnAction(event -> {
+            TextField nameField = new TextField();
+            nameField.setPrefWidth(160);
+            Button confirm = new Button("✓");
+            Button cancel = new Button("x");
+            confirm.setOnAction(ActionEvent -> {
+                String newName = nameField.getText().trim();
+                try {
+                    addTagToNote(note, newName, ""); // add colour later
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                renderWorkspace();
+            });
+            cancel.setOnAction(ActionEvent -> {
+                renderWorkspace();
+            });
+            tagContainer.getChildren().clear();
+            tagContainer.getChildren().addAll(nameField, confirm, cancel);
+        });
+
+
+
         thumbnailButton.setOnAction(event -> chooseThumbnail(note));
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
@@ -554,9 +695,14 @@ public class appControlls {
         byte[] imageData = Files.readAllBytes(selectedFile.toPath());
         System.out.println("Selected: " + selectedFile);
         System.out.println("Bytes: " + imageData.length);
-
-        Thumbnail thumbnail = new Thumbnail(0, imageData);
+        int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
+        Thumbnail thumbnail = new Thumbnail(id, imageData);
+        if (note.getThumbnail().getData() != null){
+            DB.deleteThumbnailFromDB(note.getThumbnail().getId());
+        }
         note.setThumbnail(thumbnail);
+        DB.insertNoteToDB(note.getContent(),note.getTitle(), note.getParentId(), note.getThumbnail().getId());
+
 
         System.out.println(
             "Stored bytes: " + note.getThumbnail().getData().length
@@ -567,7 +713,6 @@ public class appControlls {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-
         
     }
 }

@@ -586,6 +586,12 @@ public class DB {
     public static int deleteNoteFromDB(int id){
         int result = 0;
         try{
+            //ensure thät note doesn't have connections to tags
+            ResultSet rs = readNoteHas(id);
+            while (rs.next()) {
+                deleteNoteHasFromDB(id, rs.getInt("note_category_id"));
+            }
+
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE` WHERE `id` = '" + id + "'");
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE");
@@ -598,11 +604,19 @@ public class DB {
     public static int deleteGroupFromDB(int id){
         int result = 0;
         try{
+
+            //ensure thät group doesn't have connections to tags
+            ResultSet rs = readGroupHas(id);
+            while (rs.next()) {
+                deleteGroupHasFromDB(id, rs.getInt("group_category_id"));
+            }
             //ensure no notes exist in group
-            ResultSet rs = readNoteByGroup(id);
+            rs = readNoteByGroup(id);
             while (rs.next()) {
                 deleteNoteFromDB(rs.getInt("id"));
             }
+
+
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_GROUP` WHERE `id` = '" + id + "'");
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE_GROUP");
