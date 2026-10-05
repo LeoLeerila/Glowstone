@@ -199,26 +199,28 @@ public class appControlls {
 
         //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
         ResultSet tabs = DB.readWholeTableFromDB("NOTE_TAB");
-        while(tabs.next()){
-            Workspace tab = new Workspace(tabs.getString("name"));
-            tab.setId(tabs.getInt("id"));
-            ResultSet groups = DB.readGroupByTab(tab.getId());
-            while(groups.next()){
-                Category category = new Category(groups.getString("name"));
-                category.setId(groups.getInt("id"));
-                tab.createCategory(category);
-                ResultSet notes = DB.readNoteByGroup(category.getId());
-                while(notes.next()){
-                    Note note = new Note(notes.getString("name"));
-                    note.setId(notes.getInt("id"));
-                    note.setContent(notes.getString("content"));
-                    category.addNotes(note);
-                    System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+        if(!(tabs ==null)){
+            while(tabs.next()){
+                Workspace tab = new Workspace(tabs.getString("name"));
+                tab.setId(tabs.getInt("id"));
+                ResultSet groups = DB.readGroupByTab(tab.getId());
+                while(groups.next()){
+                    Category category = new Category(groups.getString("name"));
+                    category.setId(groups.getInt("id"));
+                    tab.createCategory(category);
+                    ResultSet notes = DB.readNoteByGroup(category.getId());
+                    while(notes.next()){
+                        Note note = new Note(notes.getString("name"));
+                        note.setId(notes.getInt("id"));
+                        note.setContent(notes.getString("content"));
+                        category.addNotes(note);
+                        System.out.println("Loaded Note with: "+note.getId()+" and category: "+note.getParentId());
+                    }
+                    System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
                 }
-                System.out.println("Loaded category with: "+category.getId()+" and tab: "+category.getParentId());
+                loadTab(tab);
+                System.out.println("Loaded tab with: "+tab.getId());
             }
-            loadTab(tab);
-            System.out.println("Loaded tab with: "+tab.getId());
         }
         //if(tab_column.getChildren().isEmpty()){loadTab(addNewTab());} //idk if needed
 
@@ -386,15 +388,28 @@ public class appControlls {
     private VBox buildCategoryNode(Category category){
         VBox categoryColumn = new VBox();
         categoryColumn.getStyleClass().add("category_view");
+        VBox titleContainer = new VBox();
         HBox categoryTitle = new HBox();
         categoryTitle.getStyleClass().add("category_title");
+
         Label categoryName = new Label(category.getName());
+        categoryName.setTextOverrun(OverrunStyle.ELLIPSIS);
         Pane pane = new Pane();
         HBox.setHgrow(pane, Priority.ALWAYS);
         pane.getChildren().add(categoryName);
         Button addNote = new Button("+");
         Button categoryEdit = new Button("✎");
         Button categoryDelete = new Button(":(");
+        categoryTitle.getChildren().addAll(pane, addNote, categoryEdit, categoryDelete);
+
+        VBox tagContainer = new VBox();
+        VBox tagRow = new VBox();
+        Button addTag = new Button("New tag");
+        tagRow.setMaxWidth(Double.MAX_VALUE);
+        tagRow.setFillWidth(true);
+        HBox.setHgrow(tagRow, Priority.ALWAYS);
+        tagContainer.getChildren().addAll(tagRow, addTag);
+
         addNote.setOnAction(event -> {addNoteToCategory(category);});
         categoryEdit.setOnAction(event -> { editCategory(category, categoryTitle);});
         categoryDelete.setOnAction(event -> {
@@ -403,13 +418,13 @@ public class appControlls {
             renderWorkspace();
         });
 
-        categoryTitle.getChildren().addAll(pane, addNote, categoryEdit, categoryDelete);
+        titleContainer.getChildren().addAll(categoryTitle, tagContainer);
 
         VBox notesContainer = new VBox();
         for(Note note : category.getNotes()){
             notesContainer.getChildren().add(buildNoteNode(category, note));
         }
-        categoryColumn.getChildren().addAll(categoryTitle, notesContainer);
+        categoryColumn.getChildren().addAll(titleContainer, notesContainer);
         return categoryColumn;
     }
     public void editCategory(Category category, HBox categoryTitle){
@@ -486,8 +501,16 @@ public class appControlls {
         Button editNote = new Button("✎");
         Button deleteNote = new Button(langToggle.getString("deleteBtn"));
         Button thumbnailButton = new Button("Image");
-        thumbnailButton.setOnAction(event -> chooseThumbnail(note));
 
+        VBox tagContainer = new VBox();
+        VBox tagRow = new VBox();
+        Button addTag = new Button("New tag");
+        tagRow.setMaxWidth(Double.MAX_VALUE);
+        tagRow.setFillWidth(true);
+        HBox.setHgrow(tagRow, Priority.ALWAYS);
+        tagContainer.getChildren().addAll(tagRow, addTag);
+
+        thumbnailButton.setOnAction(event -> chooseThumbnail(note));
         editNote.setOnAction(event -> editNotes(note, noteInstance));
         deleteNote.setOnAction(event -> {
             category.removeNotes(note);
@@ -503,7 +526,7 @@ public class appControlls {
         theStuff.maxWidthProperty().bind(noteInstance.widthProperty().subtract(10));
         noteContents.getChildren().addAll(thumbnailView, theStuff);
         noteTitle.getChildren().addAll(noteName, thumbnailButton, editNote, deleteNote);
-        noteInstance.getChildren().addAll(noteTitle, noteContents);
+        noteInstance.getChildren().addAll(noteTitle, tagContainer, noteContents);
         return noteInstance;
     }
 

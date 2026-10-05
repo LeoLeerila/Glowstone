@@ -1,38 +1,55 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'maven'
+    }
+
+    environment {
+        //PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_pat'
+        DOCKERHUB_REPO = 'leoleerila/glowstone'
+        DOCKER_IMAGE_TAG = 'v1'
+    }
+
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', 
-                    url: 'https://github.com/LeoLeerila/Glowstone.git'
+        stage ('check'){
+            steps{
+                git branch: 'main', url: 'https://github.com/LeoLeerila/Glowstone.git'
             }
         }
-        
-        stage('Build') {
-             
-            steps {
-                sh 'mvn -f glowstone/pom.xml install'
+        stage ('build'){
+            steps{
+                sh 'mvn clean install -f "./glowstone/"'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'mvn -f glowstone/pom.xml test'
+
+        stage('test') {
+            steps{
+                sh 'mvn test -f "./glowstone/"'
             }
         }
-        stage('Code Coverage') {
-            steps {
-                sh 'mvn -f glowstone/pom.xml jacoco:report'
-            }
-        }
-        stage('Publish Test Results') {
-            steps {
-                junit '**/target/surefire-reports/*.xml'
-            }
-        }
-        stage('Publish Coverage Report') {
-            steps {
+        stage('jacoco'){
+            steps{
                 jacoco()
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", './glowstone/')
+                }
+            }
+        }
+
+        /*stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                        docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }*/
     }
 }
