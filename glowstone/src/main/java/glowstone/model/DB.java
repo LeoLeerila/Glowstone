@@ -653,6 +653,19 @@ public class DB {
         return result;
     }
 
+    public static int deleteUnusedNoteCategoryFromDB(){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM NOTE_CATEGORY WHERE NOT EXISTS (SELECT note_category_id FROM NOTE_HAS WHERE NOTE_HAS.note_category_id = NOTE_CATEGORY.id)");
+            result = statement.executeUpdate();
+            System.out.println("deleted unused note categories from NOTE_CATEGORY");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+
     public static int deleteNoteGroupCategoryFromDB(int id){
         int result = 0;
         try{
@@ -665,12 +678,36 @@ public class DB {
         return result;
     }
 
+    public static int deleteUnusedNoteGroupCategoryFromDB(){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM NOTE_GROUP_CATEGORY WHERE NOT EXISTS (SELECT group_category_id FROM GROUP_HAS WHERE GROUP_HAS.group_category_id = NOTE_GROUP_CATEGORY.id)");
+            result = statement.executeUpdate();
+            System.out.println("deleted unused group categories from NOTE_CATEGORY");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static int deleteNoteHasFromDB(int noteId, int noteCategoryId){
         int result = 0;
         try{
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_HAS` WHERE `note_id` = '" + noteId + "' AND note_category_id = '" + noteCategoryId + "'");
             result = statement.executeUpdate();
             System.out.println("deleted relationship of note_id " + noteId + " and note_category_id " + noteCategoryId + " from NOTE_HAS");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int deleteNoteHasFromDB(int noteCategoryId){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_HAS` WHERE note_category_id = '" + noteCategoryId + "'");
+            result = statement.executeUpdate();
+            System.out.println("deleted relationship of note_category_id " + noteCategoryId + " from NOTE_HAS");
         } catch (Exception e){
             e.printStackTrace();
         }
