@@ -567,7 +567,12 @@ public class appControlls {
         confirm.setOnAction(event -> {
             note.setTitle(titleField.getText().trim());
             note.setContent(contentField.getText());
-            DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
+            if(note.getThumbnail() != null){
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
+            }else {
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), 0);
+            }
+
             renderWorkspace();
         });
         cancel.setOnAction(event -> {
@@ -697,7 +702,7 @@ public class appControlls {
         System.out.println("Bytes: " + imageData.length);
         int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
         Thumbnail thumbnail = new Thumbnail(id, imageData);
-        if (note.getThumbnail().getData() != null){
+        if (note.getThumbnail() != null){
             DB.deleteThumbnailFromDB(note.getThumbnail().getId());
         }
         note.setThumbnail(thumbnail);
