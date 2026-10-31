@@ -1,14 +1,13 @@
 package glowstone.model;
 
+import java.io.FileInputStream;
 import java.sql.*;
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 public class DB {
     private static Connection db = null;
 
-    public static void startConnection() throws SQLException {
-        db = DBConnector.getInstance();
+    public static void startConnection(String dbStrign) throws SQLException {
+        db = DBConnector.getInstance(dbStrign);
     }
 
     public static void endConnection() throws SQLException {
@@ -101,12 +100,19 @@ public class DB {
     public static int insertNoteToDB(String content, String name, int group_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
             statement.setObject(4, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Note creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE");
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,11 +123,18 @@ public class DB {
     public static int insertGroupToDB(String name, int tab_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setInt(2, tab_id);
             statement.setObject(3, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Group creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_GROUP");
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,10 +145,17 @@ public class DB {
     public static int insertTabToDB(String name){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setObject(2, null, Types.INTEGER);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Tab creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_TAB");
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,9 +166,16 @@ public class DB {
     public static int insertThumbnailToDB(FileInputStream blobData){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `THUMBNAIL` (`thumbnail`) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
             statement.setBlob(1, blobData);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Thumbnail creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into THUMBNAIL");
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,10 +186,17 @@ public class DB {
     public static int insertNoteCategoryToDB(String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_CATEGORY` (`name`, `color`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_CATEGORY` (`name`, `color`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Note Category creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_CATEGORY");
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,10 +207,17 @@ public class DB {
     public static int insertNoteGroupCategoryToDB(String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP_CATEGORY` (`name`, `color`) VALUES (?, ?)");
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP_CATEGORY` (`name`, `color`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    result = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Group Category creation failed: no ID was obtained.");
+                }
+            }
             System.out.println("inserted into NOTE_GROUP_CATEGORY");
         } catch (Exception e) {
             e.printStackTrace();
@@ -516,7 +557,7 @@ public class DB {
     public static int updateNoteCategoryInDB(int noteCategoryId, String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `THUMBNAIL` SET name=?, color=? WHERE id=" + noteCategoryId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_CATEGORY` SET name=?, color=? WHERE id=" + noteCategoryId);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
@@ -530,7 +571,7 @@ public class DB {
     public static int updateNoteGroupCategoryInDB(int groupCategoryId, String name, String color){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `THUMBNAIL` SET name=?, color=? WHERE id=" + groupCategoryId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_GROUP_CATEGORY` SET name=?, color=? WHERE id=" + groupCategoryId);
             statement.setString(1, name);
             statement.setString(2, color);
             result = statement.executeUpdate();
@@ -545,6 +586,12 @@ public class DB {
     public static int deleteNoteFromDB(int id){
         int result = 0;
         try{
+            //ensure thät note doesn't have connections to tags
+            ResultSet rs = readNoteHas(id);
+            while (rs.next()) {
+                deleteNoteHasFromDB(id, rs.getInt("note_category_id"));
+            }
+
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE` WHERE `id` = '" + id + "'");
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE");
@@ -557,11 +604,19 @@ public class DB {
     public static int deleteGroupFromDB(int id){
         int result = 0;
         try{
+
+            //ensure thät group doesn't have connections to tags
+            ResultSet rs = readGroupHas(id);
+            while (rs.next()) {
+                deleteGroupHasFromDB(id, rs.getInt("group_category_id"));
+            }
             //ensure no notes exist in group
-            ResultSet rs = readNoteByGroup(id);
+            rs = readNoteByGroup(id);
             while (rs.next()) {
                 deleteNoteFromDB(rs.getInt("id"));
             }
+
+
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_GROUP` WHERE `id` = '" + id + "'");
             result = statement.executeUpdate();
             System.out.println("deleted " + id + " from NOTE_GROUP");
@@ -612,6 +667,19 @@ public class DB {
         return result;
     }
 
+    public static int deleteUnusedNoteCategoryFromDB(){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM NOTE_CATEGORY WHERE NOT EXISTS (SELECT note_category_id FROM NOTE_HAS WHERE NOTE_HAS.note_category_id = NOTE_CATEGORY.id)");
+            result = statement.executeUpdate();
+            System.out.println("deleted unused note categories from NOTE_CATEGORY");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+
     public static int deleteNoteGroupCategoryFromDB(int id){
         int result = 0;
         try{
@@ -624,12 +692,36 @@ public class DB {
         return result;
     }
 
+    public static int deleteUnusedNoteGroupCategoryFromDB(){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM NOTE_GROUP_CATEGORY WHERE NOT EXISTS (SELECT group_category_id FROM GROUP_HAS WHERE GROUP_HAS.group_category_id = NOTE_GROUP_CATEGORY.id)");
+            result = statement.executeUpdate();
+            System.out.println("deleted unused group categories from NOTE_CATEGORY");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static int deleteNoteHasFromDB(int noteId, int noteCategoryId){
         int result = 0;
         try{
             PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_HAS` WHERE `note_id` = '" + noteId + "' AND note_category_id = '" + noteCategoryId + "'");
             result = statement.executeUpdate();
             System.out.println("deleted relationship of note_id " + noteId + " and note_category_id " + noteCategoryId + " from NOTE_HAS");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int deleteNoteHasFromDB(int noteCategoryId){
+        int result = 0;
+        try{
+            PreparedStatement statement = db.prepareStatement("DELETE FROM `NOTE_HAS` WHERE note_category_id = '" + noteCategoryId + "'");
+            result = statement.executeUpdate();
+            System.out.println("deleted relationship of note_category_id " + noteCategoryId + " from NOTE_HAS");
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -6,25 +6,25 @@ import java.sql.SQLException;
 
 public class DBConnector {
     private static Connection conn = null;
-    private static String connectionUrl = "jdbc:mariadb://localhost:3306/glowstone_test";
+    private static String connectionUrl = "jdbc:mariadb://localhost:3306/";
     private static String connectionUser = "root";
     private static String connectionPassword = "example";
 
-    private static void connect() {
+    private static void connect(String db) {
         try {
             if (!DriverManager.getDrivers().hasMoreElements()) {
                 System.out.println("you done fucked up now");
             }
-            conn = DriverManager.getConnection(connectionUrl, connectionUser, connectionPassword);
+            conn = DriverManager.getConnection(connectionUrl + db, connectionUser, connectionPassword);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public static Connection getInstance() throws SQLException {
+    public static Connection getInstance(String db) throws SQLException {
         if (conn == null) {
-            connect();
+            connect(db);
         }
         return conn;
     }
