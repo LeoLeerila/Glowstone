@@ -3,6 +3,7 @@ WORKDIR /glowstone
 COPY pom.xml .
 COPY . /glowstone
 COPY GlowstoneV2test.sql /glowstone/
+COPY GlowstoneV2.sql /glowstone/
 
 # download dependencies
 RUN apt-get update && apt-get install -y openjdk-21-jdk maven libx11-6 libxext6 libxrender1 libxtst6 libxi6 libgtk-3-0 mesa-utils wget unzip \
