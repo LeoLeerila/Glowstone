@@ -70,7 +70,7 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: example
     ports:
-      - 3307:3306
+      - 3306:3306
 
   adminer:
     image: adminer
