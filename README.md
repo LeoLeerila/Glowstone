@@ -41,7 +41,7 @@ After frontend and backend were connected this branch was tested before merging 
 
 To change the localization settings in Glowstone first open the settings menu in the top right corner.
 
-![Glowstone_localization_main_view.png](./Documents/images/Glowstone_localization_main_view.png)
+![Glowstone_localization_popup.png](./Documents/images/Glowstone_localization_popup.png)
 
 Select your preferred language from the popup menu.
 
