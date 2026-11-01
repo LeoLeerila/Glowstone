@@ -35,6 +35,16 @@ After frontend and backend were connected this branch was tested before merging 
 
 ![Glowstone_Code_Coverage.png](./Documents/images/Glowstone_Code_Coverage.png)
 
+## Localization settings
+
+![Glowstone_localization_main_view.png](./Documents/images/Glowstone_localization_main_view.png)
+
+To change the localization settings in Glowstone first open the settings menu in the top right corner.
+
+![Glowstone_localization_main_view.png](./Documents/images/Glowstone_localization_main_view.png)
+
+Select your preferred language from the popup menu.
+
 ## Setup & Execution
 
 ### Docker image
