@@ -174,7 +174,7 @@ class DBTest {
     }
 
     @Test 
-    void insertsReturnDatabaseGeneratedIds() {
+    void insertsReturnDatabaseGeneratedIds() throws SQLException {
         int groupId = DB.insertGroupToDB("test group", tab1Id, 0);
 
         try {
@@ -194,5 +194,262 @@ class DBTest {
             DB.deleteGroupFromDB(groupId);
         }
     }
-}
 
+    
+    @Test
+    void InsertToDBWithoutThumbnail() throws SQLException {
+        int tab3Id = DB.insertTabToDB("TAB3");
+        int group3Id = DB.insertGroupToDB("GROUP3", tab3Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id);
+
+        try {
+            assertTrue(tab3Id > 0);
+            assertTrue(group3Id > 0);
+            assertTrue(note3Id > 0);
+
+            try (ResultSet rs = DB.readFromDB("NOTE_TAB", tab3Id)) {
+                assertTrue(rs.next());
+                assertEquals("TAB3", rs.getString("name"));
+            }
+
+            try (ResultSet rs = DB.readFromDB("NOTE_GROUP", group3Id)) {
+                assertTrue(rs.next());
+                assertEquals("GROUP3", rs.getString("name"));
+                assertEquals(tab3Id, rs.getInt("tab_id"));
+
+            }
+
+            try (ResultSet rs = DB.readFromDB("NOTE", note3Id)) {
+                assertTrue(rs.next());
+                assertEquals("TEST_CONTENT", rs.getString("content"));
+                assertEquals("NOTE3", rs.getString("name"));
+                assertEquals(group3Id, rs.getInt("group_id"));
+            }
+
+            } finally {
+                if (note3Id > 0) {
+                    DB.deleteNoteFromDB(note3Id);
+                }
+                if (group3Id > 0) {
+                    DB.deleteGroupFromDB(group3Id);
+                }
+                if (tab3Id > 0) {
+                    DB.deleteTabFromDB(tab3Id);
+                }
+        }
+    }
+
+    @Test
+    void UpdateWithoutThumbnail() throws SQLException {
+        int tab3Id = DB.insertTabToDB("TAB3");
+        int group3Id = DB.insertGroupToDB("GROUP3", tab3Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id);
+
+        DB.updateTabInDB(tab3Id,"NEW_TAB3");
+        DB.updateGroupInDB(group3Id, "NEW_GROUP3", tab3Id);
+        DB.updateNoteInDB(note3Id, "NEW_CONTENT", "NEW_NOTE3", group3Id);
+
+        try {
+            assertTrue(tab3Id > 0);
+            assertTrue(group3Id > 0);
+            assertTrue(note3Id > 0);
+
+            try (ResultSet rs = DB.readFromDB("NOTE_TAB", tab3Id)) {
+                assertTrue(rs.next());
+                assertEquals("NEW_TAB3", rs.getString("name"));
+            }
+
+            try (ResultSet rs = DB.readFromDB("NOTE_GROUP", group3Id)) {
+                assertTrue(rs.next());
+                assertEquals("NEW_GROUP3", rs.getString("name"));
+                assertEquals(tab3Id, rs.getInt("tab_id"));
+
+            }
+
+            try (ResultSet rs = DB.readFromDB("NOTE", note3Id)) {
+                assertTrue(rs.next());
+                assertEquals("NEW_CONTENT", rs.getString("content"));
+                assertEquals("NEW_NOTE3", rs.getString("name"));
+                assertEquals(group3Id, rs.getInt("group_id"));
+            }
+
+
+        } finally {
+            if (note3Id > 0) {
+                    DB.deleteNoteFromDB(note3Id);
+                }
+                if (group3Id > 0) {
+                    DB.deleteGroupFromDB(group3Id);
+                }
+                if (tab3Id > 0) {
+                    DB.deleteTabFromDB(tab3Id);
+                }
+        }
+    }
+
+    @Test
+    void insertNoteCategoryToDB () throws SQLException {
+        int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
+        int category2Id = DB.insertNoteCategoryToDB(null, "#00ff00");
+
+        ResultSet rs = DB.readNoteCategory(category1Id);
+        assertTrue(rs.next());
+        assertEquals("CATEGORY1", rs.getString("name"));
+        assertEquals("#00ff00", rs.getString("color"));
+
+        assertEquals(0, category2Id);
+
+        DB.deleteNoteCategoryFromDB(category1Id);
+        DB.deleteNoteCategoryFromDB(category2Id);
+    }
+
+    @Test
+    void InsertNoteGroupCategoryToDB() throws SQLException {
+        int groupCategory1Id = DB.insertNoteGroupCategoryToDB("GROUPCATEGORY1", "#00ff00");
+        int groupCategory2Id = DB.insertNoteGroupCategoryToDB(null, "#00ff00");
+
+        ResultSet rs = DB.readNoteGroupCategory(groupCategory1Id);
+        assertTrue(rs.next());
+        assertEquals("GROUPCATEGORY1", rs.getString("name"));
+        assertEquals("#00ff00", rs.getString("color"));
+
+        assertEquals(0, groupCategory2Id);
+
+        DB.deleteNoteGroupCategoryFromDB(groupCategory1Id);
+        DB.deleteNoteGroupCategoryFromDB(groupCategory2Id);
+    }
+
+    @Test
+    void updateNoteCategoryInDB() throws SQLException {
+        int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
+        
+        DB.updateNoteCategoryInDB(category1Id, "NEW_CATEGORY1", "#00ff00");
+
+        ResultSet rs = DB.readNoteCategory(category1Id);
+        assertTrue(rs.next());
+        assertEquals("NEW_CATEGORY1", rs.getString("name"));
+        assertEquals("#00ff00", rs.getString("color"));
+
+        DB.deleteNoteCategoryFromDB(category1Id);
+    }
+
+    @Test
+    void updateNoteGroupCategoryInDB() throws SQLException {
+        int groupCategory1Id = DB.insertNoteGroupCategoryToDB("GROUP_CATEGORY1", "#00ff00");
+        
+        DB.updateNoteGroupCategoryInDB(groupCategory1Id, "NEW_GROUP_CATEGORY1", "#00ff00");
+
+        ResultSet rs = DB.readNoteGroupCategory(groupCategory1Id);
+        assertTrue(rs.next());
+        assertEquals("NEW_GROUP_CATEGORY1", rs.getString("name"));
+        assertEquals("#00ff00", rs.getString("color"));
+
+        DB.deleteNoteGroupCategoryFromDB(groupCategory1Id);
+    }
+
+    @Test
+    void readNoteCategory() throws SQLException {
+        int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
+
+        ResultSet rs = DB.readNoteCategory();
+        if(rs.next())
+        assertEquals("CATEGORY1", rs.getString("name"));
+
+        DB.deleteNoteCategoryFromDB(category1Id);
+    }
+
+    @Test
+    void readNoteGroupCategory() throws SQLException {
+        int groupCategory1Id = DB.insertNoteGroupCategoryToDB("GROUP_CATEGORY1", "#00ff00");
+
+        ResultSet rs = DB.readNoteGroupCategory();
+        if(rs.next())
+        assertEquals("GROUP_CATEGORY1", rs.getString("name"));
+
+        DB.deleteNoteGroupCategoryFromDB(groupCategory1Id);
+    }
+
+    @Test
+    void insertNoteHasToDB() throws SQLException {
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id);
+        int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
+
+        DB.insertNoteHasToDB(note3Id, category1Id);
+
+        ResultSet rs = DB.readNoteHas(note3Id, category1Id);
+        assertTrue(rs.next());
+        assertEquals(note3Id, rs.getInt("note_id"));
+        assertEquals(category1Id, rs.getInt("note_category_id"));
+        assertFalse(rs.next());
+
+        DB.deleteNoteHasFromDB(note3Id, category1Id);
+        DB.deleteNoteFromDB(note3Id);
+        DB.deleteNoteCategoryFromDB(category1Id);
+    }
+
+    @Test
+    void insertGroupHasToDB() throws SQLException {
+        int group3Id = DB.insertGroupToDB("TEST_CONTENT", tab2Id);
+        int groupCategory1Id = DB.insertNoteGroupCategoryToDB("GROUP_CATEGORY1", "#00ff00");
+
+        DB.insertGroupHasToDB(group3Id, groupCategory1Id);
+
+        ResultSet rs = DB.readGroupHas(group3Id, groupCategory1Id);
+        assertTrue(rs.next());
+        assertEquals(group3Id, rs.getInt("group_id"));
+        assertEquals(groupCategory1Id, rs.getInt("group_category_id"));
+        assertFalse(rs.next());
+
+        DB.deleteGroupHasFromDB(group3Id, groupCategory1Id);
+        DB.deleteGroupFromDB(group3Id);
+        DB.deleteNoteGroupCategoryFromDB(groupCategory1Id);
+    }
+
+    @Test
+    void readNoteHas() throws SQLException {
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id);
+        int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
+
+        DB.insertNoteHasToDB(note3Id, category1Id);
+
+        ResultSet rs = DB.readNoteHas(note3Id);
+        assertTrue(rs.next());
+        assertEquals(note3Id, rs.getInt("note_id"));
+        assertEquals(category1Id, rs.getInt("note_category_id"));
+        assertFalse(rs.next());
+
+        ResultSet rs2 = DB.readNoteHas();
+        assertTrue(rs2.next());
+        assertEquals(note3Id, rs2.getInt("note_id"));
+        assertEquals(category1Id, rs2.getInt("note_category_id"));
+        assertFalse(rs2.next());
+
+        DB.deleteNoteHasFromDB(note3Id);
+        DB.deleteNoteFromDB(note3Id);
+        DB.deleteNoteCategoryFromDB(category1Id);
+    }
+
+    @Test
+    void readGroupHas() throws SQLException {
+        int group3Id = DB.insertGroupToDB("GROUP3", tab2Id);
+        int groupCategory1Id = DB.insertNoteGroupCategoryToDB("CATEGORY1", "#00ff00");
+
+        DB.insertGroupHasToDB(group3Id, groupCategory1Id);
+
+        ResultSet rs = DB.readGroupHas(group3Id);
+        assertTrue(rs.next());
+        assertEquals(group3Id, rs.getInt("group_id"));
+        assertEquals(groupCategory1Id, rs.getInt("group_category_id"));
+        assertFalse(rs.next());
+
+        ResultSet rs2 = DB.readGroupHas();
+        assertTrue(rs2.next());
+        assertEquals(group3Id, rs2.getInt("group_id"));
+        assertEquals(groupCategory1Id, rs2.getInt("group_category_id"));
+        assertFalse(rs2.next());
+
+        DB.deleteGroupHasFromDB(group3Id, groupCategory1Id);
+        DB.deleteGroupFromDB(group3Id);
+        DB.deleteNoteGroupCategoryFromDB(groupCategory1Id);
+    }
+}
