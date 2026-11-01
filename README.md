@@ -56,8 +56,7 @@ requirements:
 
 #### 1. Setup MariaDB
 
-Download the DB folder
-[DB](./DB/)
+Download the [docker-compose.yml](./DB/mariadb/docker/docker-compose.yml) file
 
 or
 
@@ -84,20 +83,6 @@ Open a terminal in the same folder as the docker-compose.yml file
 
 Start the Mariadb container with `docker compose up -d`
 
-#### 2. Create database in MariaDB
-
-Download the Glowstone Database
-[GlowstoneV2.sql](./DB/GlowstoneV2.sql)
-
-Open http://localhost:8000/
-
-Sign in to MariaDB with username `root` and password `example`
-
-Then import the database in
-http://localhost:8000/?server=db&username=root&import=
-
-by uploading `GlowstoneV2.sql` with the `File upload` option and pressing `Execute`
-
 #### 3. Setup X server
 
 ##### Windows
@@ -118,11 +103,11 @@ Download and install `xorg-xwayland` and `xorg-xhost` if you have Wayland
 
 Run `xhost +local:`
 
-#### 4. Download docker image
+#### 3. Download docker image
 
 `docker pull leoleerila/glowstone:v2`
 
-#### 5. Start the docker image
+#### 4. Start the docker image
 
 ##### Windows
 
