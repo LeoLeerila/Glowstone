@@ -88,9 +88,9 @@
          <center>
             <HBox fx:id="center_Hbox" prefWidth="1294.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fx:id="center_scrollbar" maxWidth="-Infinity" pannable="true" HBox.hgrow="ALWAYS" styleClass="noteSpace_view">
+                  <ScrollPane fx:id="center_scrollbar" maxWidth="-Infinity" pannable="true" styleClass="noteSpace_view" HBox.hgrow="ALWAYS">
                      <content>
-                        <HBox fx:id="noteSpace_view" maxWidth="-Infinity" spacing="12.0" styleClass="noteSpace_view" fillHeight="false">
+                        <HBox fx:id="noteSpace_view" fillHeight="false" maxWidth="-Infinity" spacing="12.0" styleClass="noteSpace_view">
                            <children>
                               <VBox fx:id="category_view" prefHeight="538.0" prefWidth="264.0" styleClass="category_view">
                                  <children>
@@ -137,6 +137,11 @@
                         </RadioButton>
                         <RadioButton fx:id="radio_fi" mnemonicParsing="false" styleClass="langtoggle" text="Suomi" toggleGroup="$lang" />
                         <RadioButton fx:id="radio_ru" mnemonicParsing="false" styleClass="langtoggle" text="Русский" toggleGroup="$lang" />
+                        <RadioButton fx:id="radio_jp" mnemonicParsing="false" styleClass="langtoggle" text="Japanese">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="lang1" />
+                           </toggleGroup>
+                        </RadioButton>
                      </children>
                   </HBox>
                   <Label fx:id="colourScheme_title" text="Colour scheme">
