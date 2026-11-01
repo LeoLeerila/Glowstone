@@ -51,6 +51,8 @@ public class appControlls {
     @FXML
     private RadioButton radio_ru;
     @FXML
+    private RadioButton radio_jp;
+    @FXML
     private Button light_mode;
     @FXML
     private Button dark_mode;
@@ -96,8 +98,13 @@ public class appControlls {
         center_scrollbar.setFitToWidth(false);
 
         radio_en.setToggleGroup(tg);
+        radio_en.setText("English");
         radio_fi.setToggleGroup(tg);
+        radio_fi.setText("Suomi");
         radio_ru.setToggleGroup(tg);
+        radio_ru.setText("Русский");
+        radio_jp.setToggleGroup(tg);
+        radio_jp.setText("日本語");
         main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
         main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
         settings_overlay.setVisible(false);
@@ -124,6 +131,10 @@ public class appControlls {
                     renderWorkspace();
                 } else if (rb == radio_ru){
                     langToggle.setLocale(languageToggle.RUSSIAN);
+                    updateTranslations();
+                    renderWorkspace();
+                } else if (rb == radio_jp){
+                    langToggle.setLocale(Locale.JAPANESE);
                     updateTranslations();
                     renderWorkspace();
                 } else {
@@ -153,7 +164,7 @@ public class appControlls {
                 text = text.replace("#","");
                 if(checkNote){
                     loadFilteredNote(text, true);
-                }else {
+                } else {
                     loadFilteredCategories(text, true);
                 }
             }else{
@@ -179,6 +190,11 @@ public class appControlls {
             if(lang_title!=null) lang_title.setText(langToggle.getString("langTitle"));
             if(colourScheme_title!=null) colourScheme_title.setText(langToggle.getString("cso_title"));
             if(exit_btn!=null) exit_btn.setText(langToggle.getString("exitBtn"));
+            light_mode.setText(langToggle.getString("lightMode"));
+            dark_mode.setText(langToggle.getString("darkMode"));
+            blue_mode.setText(langToggle.getString("blueMode"));
+            pink_mode.setText(langToggle.getString("pinkMode"));
+            eyestrain_mode.setText(langToggle.getString("eyestrain"));
             for(Node n : tab_column.getChildren()){
                 if(n instanceof Button){
                     Button b = (Button) n;
