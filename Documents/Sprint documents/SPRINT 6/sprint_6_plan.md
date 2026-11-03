@@ -1,4 +1,4 @@
-# Sprint 6 ( 02/11/2026 - 15/11/2026 )
+# Sprint 6 ( 02/11/2026 - 16/11/2026 )
 
 ---
 
@@ -12,44 +12,28 @@ This means storing data in multiple languages in the database and showing the co
 ## Selected Product Backlog Items
 
 ---
-
-- Modify database to support multiple languages
-- Store multilingual data
-- Retrieve data based on selected language
-- Integrate database with UI localization
-- Complete remaining UI buttons
-- Test database localization
+- Code cleanup
 - Update README and sprint documents
-
+- Architecture Design documentation
+- Analyze code metrics
+- Acceptance test planning
 
 ## Planned Tasks/Breakdown
 
 ---
 
-- Analyze current database structure
-    - Check existing tables and fields
+- Code cleanup
+  - Clean up the code
 
-- Update database for localization
-  - 
+- Acceptance test planning
+  - Plan the acceptance tests
 
-- Update UI pages
-    - Display multilingual data
-    - Complete all buttons
+- Architecture Design documentation
+  - Document the architecture
 
-- Insert and update multilingual data
-  - 
+-Analyze code metrics
+  - Analyze the code
 
-- Testing
-    - Test database storage
-    - Test data retrieval
-    - Verify UI shows correct language
-  
-- Complete Excel sheet
-    - Add all UI strings and translations
-  
-- Update documentation
-    - Update README with database localization details
-    - 
 - Prepare sprint report
     - Include team contributions and summary
 
@@ -67,6 +51,5 @@ This means storing data in multiple languages in the database and showing the co
 
 ___
 
-The sprint is complete when the database supports multilingual data
-and the system shows the correct language based on user selection. UI displays correct data, and all buttons are working. The system is tested properly. 
+The sprint is complete when the system shows the correct language based on user selection. UI displays correct data, and all buttons are working. The system is tested properly. 
 The README, and sprint report are completed and updated.
