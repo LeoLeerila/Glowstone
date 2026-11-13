@@ -215,7 +215,7 @@ public class appControlls {
         noteSpace_view.getChildren().clear();
         tab_column.getChildren().clear();
 
-        //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O
+        //replace later with code to get stuff from the DB   <- still needs to be done, but I don't wanna (yet) :p -O <- this was done somewhere sometime magically -O
         ResultSet tabs = DB.readWholeTableFromDB("NOTE_TAB");
         if(!(tabs ==null)){
             while(tabs.next()){
@@ -341,7 +341,7 @@ public class appControlls {
     public Workspace addNewTab(){
         System.out.println("ADDING NEW WORKSPACE TAB!!!");
         Workspace workspace = new Workspace(langToggle.getString("newTab"));
-        int tabId = DB.insertTabToDB(workspace.getName(),0);//thumbnail stuff is missing
+        int tabId = DB.insertTabToDB(workspace.getName());//thumbnail stuff is missing and it WILL be missed
         workspace.setId(tabId);
         System.out.println("Tab with id: "+workspace.getId()+ ", should be: "+tabId);
         return workspace;
@@ -386,7 +386,7 @@ public class appControlls {
             if(!newName.isEmpty()){
                 workspace.setName(newName);
                 tabbtn.setText(newName);
-                DB.updateTabInDB(workspace.getId(),workspace.getName(),0);//thumbnail stuff is missing
+                DB.updateTabInDB(workspace.getId(),workspace.getName());//thumbnail stuff is missing and this one will not be missed
                 if (currentActiveWorkspace == workspace){
                     currentTabName_title.setText(newName);
                 }
@@ -412,7 +412,7 @@ public class appControlls {
         if (currentActiveWorkspace == null) return;
 
         Category category = new Category(langToggle.getString("newCategory"));
-        int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId(),0);
+        int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId()); // Thumbnail? thumbnail! thumbnail noooooooo!!!
         category.setId(id);
         category.setParentId(currentActiveWorkspace.getId());
         System.out.println("Category Id with TabID: "+category.getId()+" / "+category.getParentId()+", C.Id should be: "+id);
@@ -422,28 +422,27 @@ public class appControlls {
     private void addNoteToCategory(Category category){
         Note note = new Note(langToggle.getString("noteTitle"));
         note.setContent("");
-        int id = DB.insertNoteToDB(note.content, note.title, category.getId(), 0); //still the thing with the thing which is the thing with... thumbnail..
+        int id = DB.insertNoteToDB(note.content, note.title, category.getId()); //still the thing with the thing which is the thing with... thumbnail.. which... is not needed anymore :D
         note.setId(id);
         category.addNotes(note);
         System.out.println("Added Note with: "+note.getId()+" with category: "+note.getParentId());
         renderWorkspace();
     }
-    //Add colour plsssssssssssssssssss
+    //Add colour
     private void addTagToCategory(Category category, String txt, String colour) throws SQLException {
-        CategoryTag tag = new CategoryTag(-0 , txt, colour);
+        CategoryTag tag = new CategoryTag(0 , txt, colour);
         int tagId = DB.insertNoteGroupCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertGroupHasToDB(category.getId(), tag.getId());
         category.addTag(tag);
     }
-    //Add colour plsssssssssssssssssss
+    //Add maybe colour now?
     private void addTagToNote(Note note, String txt, String colour) throws SQLException {
-        NoteTag tag = new NoteTag(-0 , txt, colour);
+        NoteTag tag = new NoteTag(0 , txt, colour);
         int tagId = DB.insertNoteCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertNoteHasToDB(note.getId(), tag.getId());
         note.addTag(tag);
-
     }
     private void deleteTagNote(NoteTag tag, Note note){
         note.removeTag(tag);
@@ -539,7 +538,7 @@ public class appControlls {
             String newName = nameField.getText().trim();
             if(!newName.isEmpty()) {
                 category.setName(newName);
-                DB.updateGroupInDB(category.getId(), category.getName(), currentActiveWorkspace.getId(),0); // yay thumbnail :D
+                DB.updateGroupInDB(category.getId(), category.getName(), currentActiveWorkspace.getId()); // yay thumbnail :D
             }
             renderWorkspace();
         });
