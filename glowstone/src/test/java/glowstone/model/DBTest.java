@@ -17,8 +17,8 @@ class DBTest {
     @BeforeAll
     static void startConn() throws SQLException {
         DB.startConnection("glowstone_test");
-        DB.insertTabToDB("TAB1",0);
-        DB.insertTabToDB("TAB2",0);
+        DB.insertTabToDB("TAB1");
+        DB.insertTabToDB("TAB2");
         ResultSet rs = DB.readWholeTableFromDB("NOTE_TAB");
         if(rs.next()){
             tab1Id = rs.getInt("id");
@@ -29,8 +29,8 @@ class DBTest {
             System.out.println("Tab2 id: "+ tab2Id);
         }
 
-        DB.insertGroupToDB("GROUP1",tab1Id,0);
-        DB.insertGroupToDB("GROUP2",tab2Id,0);
+        DB.insertGroupToDB("GROUP1",tab1Id);
+        DB.insertGroupToDB("GROUP2",tab2Id);
 
         rs = DB.readWholeTableFromDB("NOTE_GROUP");
         if(rs.next()){
@@ -41,8 +41,8 @@ class DBTest {
             group2Id = rs.getInt("id");
             System.out.println("Group2 id: "+ group2Id);
         }
-        DB.insertNoteToDB("TEST_CONTENT", "NOTE1", group1Id, 0);
-        DB.insertNoteToDB("TEST_CONTENT", "NOTE2", group2Id, 0);
+        DB.insertNoteToDB("TEST_CONTENT", "NOTE1", group1Id);
+        DB.insertNoteToDB("TEST_CONTENT", "NOTE2", group2Id);
         rs = DB.readWholeTableFromDB("NOTE");
         if(rs.next()){
             note1Id = rs.getInt("id");
@@ -80,7 +80,7 @@ class DBTest {
         int id = 0;
         if(rs.next())
         id = rs.getInt("id");
-        DB.updateGroupInDB(id,"NEWGROUP",tab2Id,0);
+        DB.updateGroupInDB(id,"NEWGROUP",tab2Id);
         rs = DB.readFromDB("NOTE_GROUP", id);
         if(rs.next())
         assertEquals("NEWGROUP", rs.getString("name"),"TEST ALSO CHECK UPD");
@@ -89,7 +89,7 @@ class DBTest {
 
     @Test
     void updateTabInDB() throws SQLException {
-        DB.updateTabInDB(tab1Id,"NEW_TAB",0);
+        DB.updateTabInDB(tab1Id,"NEW_TAB");
         ResultSet rs = DB.readFromDB("NOTE_TAB", tab1Id);
         if(rs.next())
         assertEquals("NEW_TAB", rs.getString("name"),"TEST ALSO CHECK UPD");
@@ -175,7 +175,7 @@ class DBTest {
 
     @Test 
     void insertsReturnDatabaseGeneratedIds() throws SQLException {
-        int groupId = DB.insertGroupToDB("test group", tab1Id, 0);
+        int groupId = DB.insertGroupToDB("test group", tab1Id);
 
         try {
             assertTrue(groupId > 0);
@@ -183,8 +183,7 @@ class DBTest {
             int noteId = DB.insertNoteToDB(
                 "test content",
                 "test note",
-                groupId,
-                0
+                groupId
             );
 
             assertTrue(noteId > 0);
