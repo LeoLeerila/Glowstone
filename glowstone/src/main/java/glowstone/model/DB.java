@@ -24,11 +24,8 @@ public class DB {
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            if (thumbnail_id == 0) {
-                statement.setObject(4, null, Types.INTEGER);
-            } else {
-                statement.setInt(4, thumbnail_id);
-            }
+            statement.setInt(4, thumbnail_id);
+
             result = statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -51,11 +48,8 @@ public class DB {
             PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_GROUP` (`name`, `tab_id`, `thumbnail_id`) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setInt(2, tab_id);
-            if (thumbnail_id == 0) {
-                statement.setObject(3, null, Types.INTEGER);
-            } else {
-                statement.setInt(3, thumbnail_id);
-            }
+            statement.setInt(3, thumbnail_id);
+
             result = statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -77,11 +71,8 @@ public class DB {
         try {
             PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE_TAB` (`name`, `thumbnail_id`) VALUES (?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
-            if (thumbnail_id == 0) {
-                statement.setObject(2, null, Types.INTEGER);
-            } else {
-                statement.setInt(2, thumbnail_id);
-            }
+            statement.setInt(2, thumbnail_id);
+            
             result = statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -443,11 +434,8 @@ public class DB {
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            if (thumbnail_id == 0) {
-                statement.setObject(4, null, Types.INTEGER);
-            } else {
-                statement.setInt(4, thumbnail_id);
-            }
+            statement.setInt(4, thumbnail_id);
+            
             result = statement.executeUpdate();
             System.out.println("update NOTE with id " + noteId);
         } catch (Exception e) {
@@ -463,11 +451,8 @@ public class DB {
             PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_GROUP` SET name=?, tab_id=?, thumbnail_id=? WHERE id=" + groupId);
             statement.setString(1, name);
             statement.setInt(2, tab_id);
-            if (thumbnail_id == 0) {
-                statement.setObject(3, null, Types.INTEGER);
-            } else {
-                statement.setInt(3, thumbnail_id);
-            }
+            statement.setInt(3, thumbnail_id);
+            
             result = statement.executeUpdate();
             System.out.println("update NOTE_GROUP with id " + groupId);
         } catch (Exception e) {
@@ -482,11 +467,8 @@ public class DB {
         try {
             PreparedStatement statement = db.prepareStatement("UPDATE `NOTE_TAB` SET name=?, thumbnail_id=? WHERE id="+ tabId);
             statement.setString(1, name);
-            if (thumbnail_id == 0) {
-                statement.setObject(2, null, Types.INTEGER);
-            } else {
-                statement.setInt(2, thumbnail_id);
-            }
+            statement.setInt(2, thumbnail_id);
+            
             result = statement.executeUpdate();
             System.out.println("update NOTE_TAB with id " + tabId);
         } catch (Exception e) {
