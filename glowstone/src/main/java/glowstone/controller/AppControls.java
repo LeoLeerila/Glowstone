@@ -139,8 +139,7 @@ public class AppControls {
         m_1.setOnAction(event -> loadTab(addNewTab()));
         m_2.setOnAction(event -> addNewCategory());
         add_btn.getItems().addAll(m_1, m_2);
-        filter_btn.setOnAction(event -> {checkNote = !checkNote;
-            System.out.println(checkNote);});
+        filter_btn.setOnAction(event -> {checkNote = !checkNote; System.out.println(checkNote);});
         search_btn.setOnAction(event -> {
             String text = search_field.getText().trim();
             if(text.startsWith("#")){
@@ -166,13 +165,13 @@ public class AppControls {
 
     public void updateTranslations(){
         Platform.runLater(() ->{
-            if(m_1!=null) m_1.setText(langToggle.getString("addTabBtn"));
-            if(m_2!=null) m_2.setText(langToggle.getString("addCategoryBtn"));
-            if(add_btn!=null) add_btn.setText(langToggle.getString("addMenu"));
-            if(Add_tab!=null) Add_tab.setText(langToggle.getString("addTabBtn"));
-            if(lang_title!=null) lang_title.setText(langToggle.getString("langTitle"));
-            if(colourScheme_title!=null) colourScheme_title.setText(langToggle.getString("cso_title"));
-            if(exit_btn!=null) exit_btn.setText(langToggle.getString("exitBtn"));
+            m_1.setText(langToggle.getString("addTabBtn"));
+            m_2.setText(langToggle.getString("addCategoryBtn"));
+            add_btn.setText(langToggle.getString("addMenu"));
+            Add_tab.setText(langToggle.getString("addTabBtn"));
+            lang_title.setText(langToggle.getString("langTitle"));
+            colourScheme_title.setText(langToggle.getString("cso_title"));
+            exit_btn.setText(langToggle.getString("exitBtn"));
             light_mode.setText(langToggle.getString("lightMode"));
             dark_mode.setText(langToggle.getString("darkMode"));
             blue_mode.setText(langToggle.getString("blueMode"));
@@ -183,8 +182,8 @@ public class AppControls {
                     if(b.getGraphic() instanceof MenuButton mb){
                         for(MenuItem mi : mb.getItems()){
                             String id = mi.getId();
-                            if("editTab".equals(id)) mi.setText(langToggle.getString("editBtn"));
-                            else if("deleteTab".equals(id)) mi.setText(langToggle.getString("deleteBtn"));
+                            if("editTab".equals(id)) { mi.setText(langToggle.getString("editBtn"));}
+                            else if("deleteTab".equals(id)) { mi.setText(langToggle.getString("deleteBtn"));};
                         }
                     }
                 }
@@ -258,7 +257,7 @@ public class AppControls {
 
     private void renderWorkspace(){
         noteSpace_view.getChildren().clear();
-        if (currentActiveWorkspace == null) return;
+        if (currentActiveWorkspace == null) { return; }
 
         for(Category category : currentActiveWorkspace.getCategories()) {
             noteSpace_view.getChildren().add(buildCategoryNode(category));
@@ -279,7 +278,8 @@ public class AppControls {
             for (Category c : currentActiveWorkspace.getCategories()){
                 if(c.getName().contains(filter)){
                     System.out.println(c.getName());
-                    currentActiveWorkspace.addCategoryToShow(c);}
+                    currentActiveWorkspace.addCategoryToShow(c);
+                }
             }
         }
         renderFilteredWorkspace();
@@ -310,7 +310,7 @@ public class AppControls {
 
     private void renderFilteredWorkspace(){
         noteSpace_view.getChildren().clear();
-        if (currentActiveWorkspace == null) return;
+        if (currentActiveWorkspace == null) { return; }
 
         for(Category category : currentActiveWorkspace.getCategoriesToShow()) {
             System.out.println(category.getName());
@@ -327,19 +327,19 @@ public class AppControls {
         return workspace;
     }
     public void loadTab(Workspace workspace){
-        Button tab_btn = new Button(workspace.name);
-        tab_btn.getStyleClass().add("column_btn");
-        tab_btn.setMaxWidth(Double.MAX_VALUE);
-        tab_btn.setOnAction(event -> openTab(workspace));
-        MenuItem o_1 = new MenuItem(langToggle.getString("editBtn"));
-        MenuItem o_2 = new MenuItem(langToggle.getString("deleteBtn"));
-        MenuButton m = new MenuButton("✎", null, o_1, o_2);
-        o_1.setId("editTab");
-        o_2.setId("deleteTab");
-        o_1.setOnAction(event -> editTab(workspace, tab_btn, m));
-        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn); DB.deleteTabFromDB(workspace.getId());});
-        tab_btn.setGraphic(m);
-        tab_column.getChildren().add(tab_btn);
+        Button tabBtn = new Button(workspace.name);
+        tabBtn.getStyleClass().add("column_btn");
+        tabBtn.setMaxWidth(Double.MAX_VALUE);
+        tabBtn.setOnAction(event -> openTab(workspace));
+        MenuItem op1 = new MenuItem(langToggle.getString("editBtn"));
+        MenuItem op2 = new MenuItem(langToggle.getString("deleteBtn"));
+        MenuButton m = new MenuButton("✎", null, op1, op2);
+        op1.setId("editTab");
+        op2.setId("deleteTab");
+        op1.setOnAction(event -> editTab(workspace, tabBtn, m));
+        op2.setOnAction(event -> { tab_column.getChildren().remove(tabBtn); DB.deleteTabFromDB(workspace.getId());});
+        tabBtn.setGraphic(m);
+        tab_column.getChildren().add(tabBtn);
         tab_column.setFillWidth(true);
         openTab(workspace);
     }
@@ -389,7 +389,7 @@ public class AppControls {
     }
 
     public void addNewCategory(){
-        if (currentActiveWorkspace == null) return;
+        if (currentActiveWorkspace == null) { return; }
 
         Category category = new Category(langToggle.getString("newCategory"));
         int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId()); // Thumbnail? thumbnail! thumbnail noooooooo!!!
@@ -410,7 +410,7 @@ public class AppControls {
     }
     //Add colour
     private void addTagToCategory(Category category, String txt, String colour) throws SQLException {
-        CategoryTag tag = new CategoryTag(0 , txt, colour);
+        CategoryTag tag = new CategoryTag(0, txt, colour);
         int tagId = DB.insertNoteGroupCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertGroupHasToDB(category.getId(), tag.getId());
@@ -418,7 +418,7 @@ public class AppControls {
     }
     //Add maybe colour now?
     private void addTagToNote(Note note, String txt, String colour) throws SQLException {
-        NoteTag tag = new NoteTag(0 , txt, colour);
+        NoteTag tag = new NoteTag(0, txt, colour);
         int tagId = DB.insertNoteCategoryToDB(tag.getName(), tag.getColor());
         tag.setId(tagId);
         DB.insertNoteHasToDB(note.getId(), tag.getId());
@@ -659,19 +659,19 @@ public class AppControls {
         }
 
         try {
-        byte[] imageData = Files.readAllBytes(selectedFile.toPath());
-        System.out.println("Selected: " + selectedFile);
-        System.out.println("Bytes: " + imageData.length);
-        int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
-        Thumbnail thumbnail = new Thumbnail(id, imageData);
-        if (note.getThumbnail() != null){
-            DB.deleteThumbnailFromDB(note.getThumbnail().getId());
-        }
-        note.setThumbnail(thumbnail);
-        DB.insertNoteToDB(note.getContent(),note.getTitle(), note.getParentId(), note.getThumbnail().getId());
+            byte[] imageData = Files.readAllBytes(selectedFile.toPath());
+            System.out.println("Selected: " + selectedFile);
+            System.out.println("Bytes: " + imageData.length);
+            int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
+            Thumbnail thumbnail = new Thumbnail(id, imageData);
+            if (note.getThumbnail() != null){
+                DB.deleteThumbnailFromDB(note.getThumbnail().getId());
+            }
+            note.setThumbnail(thumbnail);
+            DB.insertNoteToDB(note.getContent(),note.getTitle(), note.getParentId(), note.getThumbnail().getId());
 
-        System.out.println("Stored bytes: " + note.getThumbnail().getData().length);
-        renderWorkspace();
+            System.out.println("Stored bytes: " + note.getThumbnail().getData().length);
+            renderWorkspace();
 
         } catch (IOException exception) {
             exception.printStackTrace();
