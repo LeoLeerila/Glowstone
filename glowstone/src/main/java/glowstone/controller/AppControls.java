@@ -1,8 +1,6 @@
 package glowstone.controller;
 import glowstone.model.*;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -11,33 +9,29 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.image.ImageView;
-
-import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.Locale;
 
 
-public class appControlls {
-    private final languageToggle langToggle = new languageToggle(Locale.ENGLISH);
+public class AppControls {
+    private final LanguageToggle langToggle = new LanguageToggle(Locale.ENGLISH);
     private final SwitchTheme themeSwitcher = new SwitchTheme();
-    MenuItem m_1;
-    MenuItem m_2;
+    private MenuItem m_1;
+    private MenuItem m_2;
     @FXML
     private StackPane scene_stackpane;
     @FXML
     private BorderPane main_area;
     @FXML
     private Pane settings_overlay;
-    ToggleGroup tg;
+    private ToggleGroup tg;
     @FXML
     private HBox center_Hbox;
     @FXML
@@ -108,53 +102,42 @@ public class appControlls {
         main_area.prefWidthProperty().bind(scene_stackpane.widthProperty());
         main_area.prefHeightProperty().bind(scene_stackpane.heightProperty());
         settings_overlay.setVisible(false);
-        settings_btn.setOnAction(event -> {
-            settings_overlay.setVisible(!settings_overlay.isVisible());
-        });
+        settings_btn.setOnAction(event -> settings_overlay.setVisible(!settings_overlay.isVisible()));
         settings_overlay.setOnMouseClicked(event -> {
             if (event.getTarget() == main_area){
                 System.out.println("AAUYGWEUA");
                 settings_overlay.setVisible(false);
             }
         });
-        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-                RadioButton rb = (RadioButton)tg.getSelectedToggle();
-                if(rb == radio_en){
-                    langToggle.setLocale(Locale.ENGLISH);
-                    updateTranslations();
-                    renderWorkspace();
-                } else if (rb == radio_fi){
-                    langToggle.setLocale(languageToggle.FINNISH);
-                    updateTranslations();
-                    renderWorkspace();
-                } else if (rb == radio_ru){
-                    langToggle.setLocale(languageToggle.RUSSIAN);
-                    updateTranslations();
-                    renderWorkspace();
-                } else if (rb == radio_jp){
-                    langToggle.setLocale(Locale.JAPANESE);
-                    updateTranslations();
-                    renderWorkspace();
-                } else {
-                    System.out.println("uhhhhhhhhhhhhhhhh no lang?");
-                }
+        tg.selectedToggleProperty().addListener((observableValue, toggle, t1) -> {
+            RadioButton rb = (RadioButton)tg.getSelectedToggle();
+            if(rb == radio_en){
+                langToggle.setLocale(Locale.ENGLISH);
+            } else if (rb == radio_fi){
+                langToggle.setLocale(LanguageToggle.FINNISH);
+            } else if (rb == radio_ru){
+                langToggle.setLocale(LanguageToggle.RUSSIAN);
+            } else if (rb == radio_jp){
+                langToggle.setLocale(Locale.JAPANESE);
+            } else {
+                System.out.println("uhhhhhhhhhhhhhhhh no lang?");
             }
+            updateTranslations();
+            renderWorkspace();
         });
-        light_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "light");});
-        blue_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "blue");});
-        dark_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "dark");});
-        pink_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "pink");});
-        eyestrain_mode.setOnAction(event -> {themeSwitcher.applyTheme(scene_stackpane, "eyestrain");});
+        light_mode.setOnAction(event -> themeSwitcher.applyTheme(scene_stackpane, "light"));
+        blue_mode.setOnAction(event -> themeSwitcher.applyTheme(scene_stackpane, "blue"));
+        dark_mode.setOnAction(event -> themeSwitcher.applyTheme(scene_stackpane, "dark"));
+        pink_mode.setOnAction(event -> themeSwitcher.applyTheme(scene_stackpane, "pink"));
+        eyestrain_mode.setOnAction(event -> themeSwitcher.applyTheme(scene_stackpane, "eyestrain"));
 
         //For some random ass reason the menubutton comes with "Action 1" and "Action 2" options by default.... needs to be cleared.
         add_btn.getItems().clear();
         m_1 = new MenuItem(langToggle.getString("addTabBtn"));
         m_2 = new MenuItem(langToggle.getString("addCategoryBtn"));
-        Add_tab.setOnAction(event -> { loadTab(addNewTab());});
-        m_1.setOnAction(event -> { loadTab(addNewTab());});
-        m_2.setOnAction(event -> { addNewCategory();});
+        Add_tab.setOnAction(event -> loadTab(addNewTab()));
+        m_1.setOnAction(event -> loadTab(addNewTab()));
+        m_2.setOnAction(event -> addNewCategory());
         add_btn.getItems().addAll(m_1, m_2);
         filter_btn.setOnAction(event -> {checkNote = !checkNote;
             System.out.println(checkNote);});
@@ -196,10 +179,8 @@ public class appControlls {
             pink_mode.setText(langToggle.getString("pinkMode"));
             eyestrain_mode.setText(langToggle.getString("eyestrain"));
             for(Node n : tab_column.getChildren()){
-                if(n instanceof Button){
-                    Button b = (Button) n;
-                    if(b.getGraphic() instanceof MenuButton){
-                        MenuButton mb = (MenuButton) b.getGraphic();
+                if(n instanceof Button b){
+                    if(b.getGraphic() instanceof MenuButton mb){
                         for(MenuItem mi : mb.getItems()){
                             String id = mi.getId();
                             if("editTab".equals(id)) mi.setText(langToggle.getString("editBtn"));
@@ -270,7 +251,6 @@ public class appControlls {
     public void openTab(Workspace workspace){
         //clear workspace
         //fetch data for the specific tab based on some sort of ID
-        //no
         currentActiveWorkspace = workspace;
         currentTabName_title.setText(currentActiveWorkspace.getName());
         renderWorkspace();
@@ -350,14 +330,14 @@ public class appControlls {
         Button tab_btn = new Button(workspace.name);
         tab_btn.getStyleClass().add("column_btn");
         tab_btn.setMaxWidth(Double.MAX_VALUE);
-        tab_btn.setOnAction(event -> {openTab(workspace);});
+        tab_btn.setOnAction(event -> openTab(workspace));
         MenuItem o_1 = new MenuItem(langToggle.getString("editBtn"));
         MenuItem o_2 = new MenuItem(langToggle.getString("deleteBtn"));
         MenuButton m = new MenuButton("✎", null, o_1, o_2);
         o_1.setId("editTab");
         o_2.setId("deleteTab");
-        o_1.setOnAction(event -> { editTab(workspace, tab_btn, m);});
-        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn);DB.deleteTabFromDB(workspace.getId());});
+        o_1.setOnAction(event -> editTab(workspace, tab_btn, m));
+        o_2.setOnAction(event -> { tab_column.getChildren().remove(tab_btn); DB.deleteTabFromDB(workspace.getId());});
         tab_btn.setGraphic(m);
         tab_column.getChildren().add(tab_btn);
         tab_column.setFillWidth(true);
@@ -415,7 +395,7 @@ public class appControlls {
         int id = DB.insertGroupToDB(category.getName(), currentActiveWorkspace.getId()); // Thumbnail? thumbnail! thumbnail noooooooo!!!
         category.setId(id);
         category.setParentId(currentActiveWorkspace.getId());
-        System.out.println("Category Id with TabID: "+category.getId()+" / "+category.getParentId()+", C.Id should be: "+id);
+        System.out.println("Category Id with TabID: " + category.getId() + " / " + category.getParentId() + ", C.Id should be: " + id);
         currentActiveWorkspace.createCategory(category);
         renderWorkspace();
     }
@@ -425,7 +405,7 @@ public class appControlls {
         int id = DB.insertNoteToDB(note.content, note.title, category.getId()); //still the thing with the thing which is the thing with... thumbnail.. which... is not needed anymore :D
         note.setId(id);
         category.addNotes(note);
-        System.out.println("Added Note with: "+note.getId()+" with category: "+note.getParentId());
+        System.out.println("Added Note with: " + note.getId() + " with category: " + note.getParentId());
         renderWorkspace();
     }
     //Add colour
@@ -505,15 +485,13 @@ public class appControlls {
                 }
                 renderWorkspace();
             });
-            cancel.setOnAction(ActionEvent -> {
-                renderWorkspace();
-            });
+            cancel.setOnAction(ActionEvent -> renderWorkspace());
             tagContainer.getChildren().clear();
             tagContainer.getChildren().addAll(nameField, confirm, cancel);
         });
 
-        addNote.setOnAction(event -> {addNoteToCategory(category);});
-        categoryEdit.setOnAction(event -> { editCategory(category, categoryTitle);});
+        addNote.setOnAction(event -> addNoteToCategory(category));
+        categoryEdit.setOnAction(event -> editCategory(category, categoryTitle));
         categoryDelete.setOnAction(event -> {
             currentActiveWorkspace.removeCategory(category);
             DB.deleteGroupFromDB(category.getId());
@@ -542,9 +520,7 @@ public class appControlls {
             }
             renderWorkspace();
         });
-        cancel.setOnAction(event -> {
-            renderWorkspace();
-        });
+        cancel.setOnAction(event -> renderWorkspace());
         categoryTitle.getChildren().clear();
         categoryTitle.getStyleClass().add("category_title");
         categoryTitle.getChildren().addAll(nameField, confirm, cancel);
@@ -566,12 +542,9 @@ public class appControlls {
             }else {
                 DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), 0);
             }
-
             renderWorkspace();
         });
-        cancel.setOnAction(event -> {
-            renderWorkspace();
-        });
+        cancel.setOnAction(event -> renderWorkspace());
 
         noteInstance.getChildren().clear();
         noteInstance.getStyleClass().add("note_card");
@@ -595,7 +568,6 @@ public class appControlls {
             thumbnailView.setPreserveRatio(true);
             thumbnailView.setSmooth(true);
         }
-        
 
         HBox noteTitle = new HBox();
         noteTitle.getStyleClass().add("note_title");
@@ -641,14 +613,10 @@ public class appControlls {
                 }
                 renderWorkspace();
             });
-            cancel.setOnAction(ActionEvent -> {
-                renderWorkspace();
-            });
+            cancel.setOnAction(ActionEvent -> renderWorkspace());
             tagContainer.getChildren().clear();
             tagContainer.getChildren().addAll(nameField, confirm, cancel);
         });
-
-
 
         thumbnailButton.setOnAction(event -> chooseThumbnail(note));
         editNote.setOnAction(event -> editNotes(note, noteInstance));
@@ -672,7 +640,7 @@ public class appControlls {
 
     private void chooseThumbnail(Note note) {
         FileChooser chooser = new FileChooser();
-        
+
         FileChooser.ExtensionFilter extFilterJPG
                 = new FileChooser.ExtensionFilter("JPG files (*.JPG)", "*.JPG");
         FileChooser.ExtensionFilter extFilterjpg
@@ -702,16 +670,11 @@ public class appControlls {
         note.setThumbnail(thumbnail);
         DB.insertNoteToDB(note.getContent(),note.getTitle(), note.getParentId(), note.getThumbnail().getId());
 
-
-        System.out.println(
-            "Stored bytes: " + note.getThumbnail().getData().length
-            );
-
+        System.out.println("Stored bytes: " + note.getThumbnail().getData().length);
         renderWorkspace();
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        
     }
 }

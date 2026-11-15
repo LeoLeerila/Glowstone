@@ -1,6 +1,4 @@
 package glowstone.controller;
-
-import javafx.application.Platform;
 import javafx.scene.Parent;
 
 public class SwitchTheme {
@@ -13,34 +11,23 @@ public class SwitchTheme {
     public SwitchTheme() {}
 
     public void applyTheme(Parent root, String theme) {
+        //Making this into a switch case could be a more elegant solution, but I am not elegant
+        root.getStylesheets().clear();
         if (theme.equals("light")) {
-            System.out.println("Switching to light theme!");
-            root.getStylesheets().clear();
             root.getStylesheets().add(lightThemeFile);
-            root.applyCss();
         } else if (theme.equals("blue")){
-            System.out.println("Switching to blue theme!");
-            root.getStylesheets().clear();
             root.getStylesheets().add(blueThemeFile);
-            root.applyCss();
         } else if (theme.equals("dark")) {
-            System.out.println("Switching to dark theme!");
-            root.getStylesheets().clear();
             root.getStylesheets().add(darkThemeFile);
-            root.applyCss();
         } else if (theme.equals("pink")){
-            System.out.println("Switching to pink theme!");
-            root.getStylesheets().clear();
             root.getStylesheets().add(pinkThemeFile);
-            root.applyCss();
         } else if (theme.equals("eyestrain")){
             System.out.println("Switching to eyestrain theme... why...");
-            root.getStylesheets().clear();
             root.getStylesheets().add(eyestrainThemeFile);
-            root.applyCss();
         }
         else {
             System.out.println("This bum ass developer made a typo in main controller");
         }
+        root.applyCss();
     }
 }
