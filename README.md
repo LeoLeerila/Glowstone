@@ -31,6 +31,10 @@ Frontend and backend were split to different branches in which the features were
 After frontend and backend branches had their features implemented they were merged to a testing branch to connect the backend and frontend features.
 After frontend and backend were connected this branch was tested before merging to main.
 
+MariaDB uses utf8 encoding by default so any text in the supported languages entered by the user will be saved correctly, the supported languages include English, Finnish, Russian and Japanese.
+
+Static text in the app is not stored in the database.
+
 ## Functional Testing
 
 ![Glowstone_Code_Coverage.png](./Documents/images/Glowstone_Code_Coverage.png)
