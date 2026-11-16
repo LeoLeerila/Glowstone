@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Note {
-    private static int t_id; //remove later
     private int parentId;
     private int id;
     public String title;
     public String content;
-    private List<NoteTag> tags = new ArrayList<>();
+    private final List<NoteTag> tags = new ArrayList<>();
     private Thumbnail thumbnail;
 
 

@@ -1,8 +1,8 @@
 package glowstone.model;
 
 public class Thumbnail {
-    private int id;
-    private byte[] data;
+    private final int id;
+    private final byte[] data;
 
     public Thumbnail(int id, byte[] data) {
         this.id = id;

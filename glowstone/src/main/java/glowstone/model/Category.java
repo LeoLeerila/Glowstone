@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
-    private static int t_id; //remove later
     private int parentId;
     private int id;
     public String name;
     public List<Note> notes = new ArrayList<>();
-    private List<CategoryTag> tags = new ArrayList<>();
+    private final List<CategoryTag> tags = new ArrayList<>();
 
     public Category(String name){
         this.name = name;

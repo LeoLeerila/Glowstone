@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Workspace {
     private int id;
-    private static int t_id; // remove later
     public String name;
     public List<Category> categories;
     public List<Category> categoriesToShow = new ArrayList<>();
