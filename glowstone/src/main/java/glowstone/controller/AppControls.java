@@ -540,7 +540,7 @@ public class AppControls {
             if(note.getThumbnail() != null){
                 DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
             }else {
-                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), 0);
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId());
             }
             renderWorkspace();
         });
