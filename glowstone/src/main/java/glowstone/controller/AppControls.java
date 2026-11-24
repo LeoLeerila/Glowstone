@@ -402,7 +402,7 @@ public class AppControls {
     private void addNoteToCategory(Category category){
         Note note = new Note(langToggle.getString("noteTitle"));
         note.setContent("");
-        int id = DB.insertNoteToDB(note.content, note.title, category.getId()); //still the thing with the thing which is the thing with... thumbnail.. which... is not needed anymore :D
+        int id = DB.insertNoteToDB(note.content, note.title, category.getId(), langToggle.getLocaleName()); //still the thing with the thing which is the thing with... thumbnail.. which... is not needed anymore :D
         note.setId(id);
         category.addNotes(note);
         System.out.println("Added Note with: " + note.getId() + " with category: " + note.getParentId());
@@ -538,9 +538,9 @@ public class AppControls {
             note.setTitle(titleField.getText().trim());
             note.setContent(contentField.getText());
             if(note.getThumbnail() != null){
-                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), langToggle.getLocaleName(),note.getThumbnail().getId()); //thumbnail thingy
             }else {
-                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId());
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), langToggle.getLocaleName());
             }
             renderWorkspace();
         });
@@ -665,11 +665,11 @@ public class AppControls {
             int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
             Thumbnail thumbnail = new Thumbnail(id, imageData);
             if (note.getThumbnail() != null){
-                DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId());
+                DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId(), langToggle.getLocaleName());
                 DB.deleteThumbnailFromDB(note.getThumbnail().getId());
             }
             note.setThumbnail(thumbnail);
-            DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId(), note.getThumbnail().getId());
+            DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId(), langToggle.getLocaleName(), note.getThumbnail().getId());
 
             System.out.println("Stored bytes: " + note.getThumbnail().getData().length);
             renderWorkspace();

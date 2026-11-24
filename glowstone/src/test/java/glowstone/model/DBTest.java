@@ -41,8 +41,8 @@ class DBTest {
             group2Id = rs.getInt("id");
             System.out.println("Group2 id: "+ group2Id);
         }
-        DB.insertNoteToDB("TEST_CONTENT", "NOTE1", group1Id);
-        DB.insertNoteToDB("TEST_CONTENT", "NOTE2", group2Id);
+        DB.insertNoteToDB("TEST_CONTENT", "NOTE1", group1Id, "en");
+        DB.insertNoteToDB("TEST_CONTENT", "NOTE2", group2Id, "en");
         rs = DB.readWholeTableFromDB("NOTE");
         if(rs.next()){
             note1Id = rs.getInt("id");
@@ -64,7 +64,7 @@ class DBTest {
         int id = 0;
         if(rs.next())
         id = rs.getInt("id");
-        DB.updateNoteInDB(id,"NEW_CONTENT","NEWNOTE",group2Id, 0);
+        DB.updateNoteInDB(id,"NEW_CONTENT","NEWNOTE",group2Id, "en");
         rs = DB.readFromDB("NOTE", id);
         if(rs.next())
         assertEquals("NEWNOTE", rs.getString("name"),"TEST ALSO CHECK UPD");
@@ -183,7 +183,8 @@ class DBTest {
             int noteId = DB.insertNoteToDB(
                 "test content",
                 "test note",
-                groupId
+                groupId,
+                "en"
             );
 
             assertTrue(noteId > 0);
@@ -199,7 +200,7 @@ class DBTest {
     void InsertToDBWithoutThumbnail() throws SQLException {
         int tab3Id = DB.insertTabToDB("TAB3");
         int group3Id = DB.insertGroupToDB("GROUP3", tab3Id);
-        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id, "en");
 
         try {
             assertTrue(tab3Id > 0);
@@ -242,11 +243,11 @@ class DBTest {
     void UpdateWithoutThumbnail() throws SQLException {
         int tab3Id = DB.insertTabToDB("TAB3");
         int group3Id = DB.insertGroupToDB("GROUP3", tab3Id);
-        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group3Id, "en");
 
         DB.updateTabInDB(tab3Id,"NEW_TAB3");
         DB.updateGroupInDB(group3Id, "NEW_GROUP3", tab3Id);
-        DB.updateNoteInDB(note3Id, "NEW_CONTENT", "NEW_NOTE3", group3Id);
+        DB.updateNoteInDB(note3Id, "NEW_CONTENT", "NEW_NOTE3", group3Id, "en");
 
         try {
             assertTrue(tab3Id > 0);
@@ -370,7 +371,7 @@ class DBTest {
 
     @Test
     void insertNoteHasToDB() throws SQLException {
-        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id, "en");
         int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
 
         DB.insertNoteHasToDB(note3Id, category1Id);
@@ -406,7 +407,7 @@ class DBTest {
 
     @Test
     void readNoteHas() throws SQLException {
-        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id);
+        int note3Id = DB.insertNoteToDB("TEST_CONTENT", "NOTE3", group2Id, "en");
         int category1Id = DB.insertNoteCategoryToDB("CATEGORY1", "#00ff00");
 
         DB.insertNoteHasToDB(note3Id, category1Id);

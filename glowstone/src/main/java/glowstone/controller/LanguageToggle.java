@@ -17,4 +17,7 @@ public class LanguageToggle {
     public String getString(String key){
         return translations.getString(key);
     }
+    public String getLocaleName(){
+        return translations.getLocale().getDisplayLanguage();
+    }
 }
