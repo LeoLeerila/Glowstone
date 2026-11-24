@@ -6,6 +6,8 @@ pipeline {
     }
 
     environment {
+        SONARQUBE_SERVER = 'SonarQubeServer'
+        SONAR_TOKEN = credentials('sonarqube')
         //PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKERHUB_CREDENTIALS_ID = 'Docker_pat'
         DOCKERHUB_REPO = 'leoleerila/glowstone'
@@ -32,6 +34,21 @@ pipeline {
         stage('jacoco'){
             steps{
                 jacoco()
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${env.SONARQUBE_SERVER}") {
+                    sh """
+                        sonar-scanner ^
+                        -Dsonar.projectKey=glowstoneKey ^
+                        -Dsonar.sources=src ^
+                        -Dsonar.projectName=Glowstone ^
+                        -Dsonar.host.url=http://localhost:9000 ^
+                        -Dsonar.login=${env.SONAR_TOKEN} ^
+                        -Dsonar.java.binaries=target/classes
+                    """
+                }
             }
         }
         stage('Build Docker Image') {
