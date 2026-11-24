@@ -89,7 +89,7 @@ public class DB {
         return result;
     }
 
-    public static int insertNoteToDB(String content, String name, String UILang, int group_id){
+    public static int insertNoteToDB(String content, String name, int group_id, String UILang){
         int result = 0;
         try {
             PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `lang`, `thumbnail_id`) VALUES (?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
@@ -510,7 +510,7 @@ public class DB {
         return result;
     }
 
-    public static int updateNoteInDB(int noteId, String content, String name, String UILang, int group_id){
+    public static int updateNoteInDB(int noteId, String content, String name, int group_id, String UILang){
         int result = 0;
         try {
             PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, lang=?, thumbnail_id=? WHERE id=" + noteId);
