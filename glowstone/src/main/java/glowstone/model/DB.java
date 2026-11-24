@@ -17,14 +17,15 @@ public class DB {
 
     //create
     //INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`)
-    public static int insertNoteToDB(String content, String name, int group_id, int thumbnail_id){
+    public static int insertNoteToDB(String content, String name, int group_id, String UILang, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `lang`, `thumbnail_id`) VALUES (?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            statement.setInt(4, thumbnail_id);
+            statement.setString(4, UILang);
+            statement.setInt(5, thumbnail_id);
 
             result = statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -88,14 +89,15 @@ public class DB {
         return result;
     }
 
-    public static int insertNoteToDB(String content, String name, int group_id){
+    public static int insertNoteToDB(String content, String name, String UILang, int group_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`) VALUES (?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = db.prepareStatement("INSERT INTO `NOTE` (`content`, `name`, `group_id`, `lang`, `thumbnail_id`) VALUES (?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            statement.setObject(4, null, Types.INTEGER);
+            statement.setString(4, UILang);
+            statement.setObject(5, null, Types.INTEGER);
             result = statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -427,14 +429,15 @@ public class DB {
 
     //update
     //INSERT INTO `NOTE` (`content`, `name`, `group_id`, `thumbnail_id`)
-    public static int updateNoteInDB(int noteId, String content, String name, int group_id, int thumbnail_id){
+    public static int updateNoteInDB(int noteId, String content, String name, int group_id, String UILang, int thumbnail_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, thumbnail_id=? WHERE id=" + noteId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, lang=?, thumbnail_id=? WHERE id=" + noteId);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            statement.setInt(4, thumbnail_id);
+            statement.setString(4, UILang);
+            statement.setInt(5, thumbnail_id);
             
             result = statement.executeUpdate();
             System.out.println("update NOTE with id " + noteId);
@@ -507,14 +510,15 @@ public class DB {
         return result;
     }
 
-    public static int updateNoteInDB(int noteId, String content, String name, int group_id){
+    public static int updateNoteInDB(int noteId, String content, String name, String UILang, int group_id){
         int result = 0;
         try {
-            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, thumbnail_id=? WHERE id=" + noteId);
+            PreparedStatement statement = db.prepareStatement("UPDATE `NOTE` SET content=?, name=?, group_id=?, lang=?, thumbnail_id=? WHERE id=" + noteId);
             statement.setString(1, content);
             statement.setString(2, name);
             statement.setInt(3, group_id);
-            statement.setObject(4, null, Types.INTEGER);
+            statement.setString(4, UILang);
+            statement.setObject(5, null, Types.INTEGER);
             result = statement.executeUpdate();
             System.out.println("update NOTE with id " + noteId);
         } catch (Exception e) {
