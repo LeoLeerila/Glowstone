@@ -40,13 +40,7 @@ pipeline {
             steps {
                 withSonarQubeEnv("${env.SONARQUBE_SERVER}") {
                     sh """
-                        sonar-scanner ^
-                        -Dsonar.projectKey=glowstoneKey ^
-                        -Dsonar.sources=src ^
-                        -Dsonar.projectName=Glowstone ^
-                        -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.login=${env.SONAR_TOKEN} ^
-                        -Dsonar.java.binaries=target/classes
+                        sonar-scanner -Dsonar.projectKey=glowstoneKey -Dsonar.sources=src -Dsonar.projectName=Glowstone -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${env.SONAR_TOKEN} -Dsonar.java.binaries=target/classes
                     """
                 }
             }
