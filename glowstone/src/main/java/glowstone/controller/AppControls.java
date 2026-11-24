@@ -540,7 +540,7 @@ public class AppControls {
             if(note.getThumbnail() != null){
                 DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(),note.getThumbnail().getId()); //thumbnail thingy
             }else {
-                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId(), 0);
+                DB.updateNoteInDB(note.getId(),note.getContent(),note.getTitle(),note.getParentId());
             }
             renderWorkspace();
         });
@@ -665,10 +665,11 @@ public class AppControls {
             int id = DB.insertThumbnailToDB(new FileInputStream(selectedFile));
             Thumbnail thumbnail = new Thumbnail(id, imageData);
             if (note.getThumbnail() != null){
+                DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId());
                 DB.deleteThumbnailFromDB(note.getThumbnail().getId());
             }
             note.setThumbnail(thumbnail);
-            DB.insertNoteToDB(note.getContent(),note.getTitle(), note.getParentId(), note.getThumbnail().getId());
+            DB.updateNoteInDB(note.getId(), note.getContent(), note.getTitle(), note.getParentId(), note.getThumbnail().getId());
 
             System.out.println("Stored bytes: " + note.getThumbnail().getData().length);
             renderWorkspace();
