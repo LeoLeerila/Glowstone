@@ -91,14 +91,15 @@ Note persists through relaunch of the application and is saved in the local data
 
 **Requirement:** RE-04
 
-**Description:** This test is intended to confirm that notes are saved in a local database.
+**Description:** This test is intended to confirm that localization for the specified languages exists.
 
 **Steps:**
-1. Create a note
-2. Application is closed and relaunched to confirm note and it's category and workspace persisted through relaunching
+1. Open settings menu
+2. Confirm that options for the specified languages can be found in the settings menu
+3. Cycle through available language options and confirm that changes are applied in the application after choosing a localization setting
 
 **Expected Outcome:**
-Note persists through relaunch of the application and is saved in the local database.
+Language localization changes to the one chosen in the settings menu each time.
 
 ---
 
